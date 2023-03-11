@@ -1,4 +1,3 @@
 venv/*
-DocRED/*
-docrem.csv
-docred.csv
+docred_database/DocRED/*
+docred_database/docred.csv
