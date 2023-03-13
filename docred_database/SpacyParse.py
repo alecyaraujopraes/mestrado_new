@@ -23,6 +23,7 @@ def paths(sentence: str) -> list:
 
     for token in doc:
         dict_dependencies[token.text] = [child.text for child in token.children]
+    print(f"Dict dependencies: {dict_dependencies}")
 
     def path_item(key: str, value: list, path_list: list) -> list:
 
@@ -70,16 +71,19 @@ relation = find_relation_between_entities_spacy(args.sentence, tuple_of_entities
 print(relation)
 relation_annotated = args.relation_annotated
 
-if relation:
-    field_names = ["Frase", "Entidades", "Relação_encontrada_por_mim", "Relação_encontrada_no_benchmark"]
+print(f"Frase: {args.sentence}, Entidades: {tuple_of_entities}, Relação_encontrada_por_mim: {relation}, Relação_encontrada_no_benchmark: {relation_annotated}")
 
-    with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
-        dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-        writer = csv.DictWriter(f_object, fieldnames=field_names)
-        writer.writerow({'Frase': args.sentence, 'Entidades': tuple_of_entities, 'Relação_encontrada_por_mim': relation, 'Relação_encontrada_no_benchmark': relation_annotated})
 
-        f_object.close()
-    print("Saved relation in csv")
+# if relation:
+#     field_names = ["Frase", "Entidades", "Relação_encontrada_por_mim", "Relação_encontrada_no_benchmark"]
+
+#     with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
+#         dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+#         writer = csv.DictWriter(f_object, fieldnames=field_names)
+#         writer.writerow({'Frase': args.sentence, 'Entidades': tuple_of_entities, 'Relação_encontrada_por_mim': relation, 'Relação_encontrada_no_benchmark': relation_annotated})
+
+#         f_object.close()
+#     print("Saved relation in csv")
 
 
 # with open('test.txt', 'w') as f:
