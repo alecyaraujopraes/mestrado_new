@@ -50,29 +50,42 @@ def l(dependencies: dict)-> list:
 
 
     
-def find_paths (dict_dependencies: dict, paths: list)->list:
+def find_paths(dict_dependencies: dict, paths: list, items_to_remove: list)->list:
     if len(paths)==0:
         for k,v in dict_dependencies.items():
             for item in v:
                 paths.append([k, item])
-        find_paths(dict_dependencies, paths)
         print(f"Paths first: {paths}")
+        find_paths(dict_dependencies, paths, items_to_remove)
     else:
-        print(f"Paths: {paths}")
+        print(f"Paths else: {paths}")
         for item in paths:
             print(f"Paths: {item}")
-            new_search = item[len(item)-1]
-            if new_search in dict_dependencies:
-                for i in new_search:
-                    new_item = item.append(i)
-                    paths.append(new_item)
-            else:
-                return paths
-        find_paths(dict_dependencies, paths)
+            last_word = item[len(item)-1]
+            for i in paths:
+                if i[0] == last_word:
+                    print(f"Item pra juntar: {i}")
+                    item_new = item + i[1::]
+                    if item_new not in paths:
+                        paths.append(item_new)
+                        print(f"Item após junção: {item_new}")
+                    if i not in items_to_remove:
+                        items_to_remove.append(i)
+        print(f"Paths: {paths}")
+        print(f"Items to remove: {items_to_remove}")
+        if len(items_to_remove) > 0:
+            for used_item in items_to_remove:
+                try:
+                    paths.remove(used_item)
+                except:
+                    pass
+            find_paths(dict_dependencies, paths, items_to_remove)
+        else:
+            return paths
     
 paths_list = []
-p = find_paths(dict_dependencies, paths_list)
-print(p)
+p = find_paths(dict_dependencies, paths_list, [])
+print(paths_list)
     
 
 
