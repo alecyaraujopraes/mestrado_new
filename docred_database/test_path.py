@@ -49,45 +49,64 @@ def l(dependencies: dict)-> list:
     return paths_list
 
 
-    
-def find_paths(dict_dependencies: dict, paths: list, items_to_remove: list)->list:
-    if len(paths)==0:
-        for k,v in dict_dependencies.items():
-            for item in v:
-                paths.append([k, item])
-        print(f"Paths first: {paths}")
-        find_paths(dict_dependencies, paths, items_to_remove)
+def find_paths(paths: list)->list:
+    print(paths)
+    # size_before = len(paths)
+    for item in paths:
+        for item_0 in paths:
+            if item[len(item)-1] == item_0[0]:
+                item_new = item + item_0[1::]
+                paths.append(item_new)
+    # size_after = len(paths)
+    # if size_before == size_after:
+    #     return paths
     else:
-        print(f"Paths else: {paths}")
-        for item in paths:
-            print(f"Paths: {item}")
-            last_word = item[len(item)-1]
-            for i in paths:
-                if i[0] == last_word:
-                    print(f"Item pra juntar: {i}")
-                    item_new = item + i[1::]
-                    if item_new not in paths:
-                        paths.append(item_new)
-                        print(f"Item após junção: {item_new}")
-                    if i not in items_to_remove:
-                        items_to_remove.append(i)
-        print(f"Paths: {paths}")
-        print(f"Items to remove: {items_to_remove}")
-        if len(items_to_remove) > 0:
-            for used_item in items_to_remove:
-                try:
-                    paths.remove(used_item)
-                except:
-                    pass
-            find_paths(dict_dependencies, paths, items_to_remove)
+        print(paths)
+        find_paths(paths)
+
+paths = []
+for k,v in dict_dependencies.items():
+    for item in v:
+        paths.append([k, item])
+
+# def f(v, item):
+#     next = dict_dependencies.get(f"{v}")
+#     if not next:
+#         print(f"Item: {item}")
+#         return item
+#     else:
+#         for next_item in next:
+#             item.append(next_item)
+#             f(dict_dependencies.get(f"{next_item}"), item)
+
+# paths = []
+# for k,v in dict_dependencies.items():
+#     for item in v:
+#         item = [k,v]
+#         paths.append(f(v, item))
+
+
+# find_paths(paths)    
+
+# print(paths)
+
+# organizar em pilha a primeira lista que tem a entidade e procurar pelo segundo elemento em loop até achar a segunda entidade
+#  algoritmo de caminhamento em amplitude
+
+def path(begin, final, list_path=[]):
+    list_path = list_path + [begin]
+    if final == begin:
+        return list_path
+    else:
+        if not dict_dependencies.get(begin):
+            list_path = list(set(list_path) - set([begin]))
+            return list_path
         else:
-            return paths
-    
-paths_list = []
-p = find_paths(dict_dependencies, paths_list, [])
-print(paths_list)
-    
+            for n in dict_dependencies.get(begin):
+                path2 = path(n, final, list_path=list_path)
+                if len(path2) > len(list_path): return path2
+            list_path = list(set(list_path) - set([begin]))
+            return list_path
 
-
-# pl = l(dict_dependencies)
-# print(pl)
+r = path("was", "the Philippines")
+print(r)
