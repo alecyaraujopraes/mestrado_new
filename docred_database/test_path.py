@@ -94,6 +94,15 @@ for k,v in dict_dependencies.items():
 #  algoritmo de caminhamento em amplitude
 
 def path(begin, final, list_path=[]):
+    if begin not in dict_dependencies:
+        for k, v in dict_dependencies.items():
+            if begin in k:
+                begin = k
+    if final not in dict_dependencies:
+        for k, v in dict_dependencies.items():
+            if final in k:
+                final = k
+
     list_path = list_path + [begin]
     if final == begin:
         return list_path
@@ -108,5 +117,6 @@ def path(begin, final, list_path=[]):
             list_path = list(set(list_path) - set([begin]))
             return list_path
 
-r = path("was", "the Philippines")
+r = path("Metro Manila", "Philippines", [])
+
 print(r)
