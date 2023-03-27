@@ -15,38 +15,52 @@ argParser.add_argument("-r", "--relation_annotated", help="Relation between enti
 
 args = argParser.parse_args()
 
+def find_entities(entity_given: str, dict_dependencies: dict)-> list:
+    if entity_given in dict_dependencies:
+        entity_given = [entity_found]
+    else:
+        for k, v in dict_dependencies.items():
+            if entity_given in k:
+                entity_found = [k]
 
-def path(sentence: str, begin: str, final: str, list_path=[]):
+    if entity_found == None:
+        possible_entities = []
+        x = entity_given.split()
+        for entity in x:
+            for k,v in dict_dependencies.items():
+                if entity in k:
+                    possible_entities.append(k)
+        entity_found = possible_entities
+
+    return entity_found
+
+
+def path(sentence: str, start: str, end: str, list_path=[]):
     doc = nlp(sentence)
     dict_dependencies = {}
 
     for token in doc:
         dict_dependencies[token.text] = [child.text for child in token.children]
-    # print(f"Dict dependencies: {dict_dependencies}")
-
-    if begin not in dict_dependencies:
-        for k, v in dict_dependencies.items():
-            if begin in k:
-                begin = k
-    if final not in dict_dependencies:
-        for k, v in dict_dependencies.items():
-            if final in k:
-                final = k
     
+    list_entity_0 = find_entities(start, dict_dependencies)
+    list_entity_1 = find_entities(end, dict_dependencies)
 
-    list_path = list_path + [begin]
-    if final == begin:
-        return list_path
-    else:
-        if not dict_dependencies.get(begin):
-            list_path = list(set(list_path) - set([begin]))
-            return list_path
-        else:
-            for n in dict_dependencies.get(begin):
-                path2 = path(n, final, list_path=list_path)
-                if len(path2) > len(list_path): return path2
-            list_path = list(set(list_path) - set([begin]))
-            return list_path
+    for entity_0 in list_entity_0:
+        for entity_1 in list_entity_1:
+
+            list_path = list_path + [entity_0]
+            if entity_1 == entity_0:
+                return list_path
+            else:
+                if not dict_dependencies.get(entity_0):
+                    list_path = list(set(list_path) - set([entity_0]))
+                    return list_path
+                else:
+                    for n in dict_dependencies.get(entity_0):
+                        path2 = path(n, entity_1, list_path=list_path)
+                        if len(path2) > len(list_path): return path2
+                    list_path = list(set(list_path) - set([entity_0]))
+                    return list_path
 
 
 def find_relation_between_entities_spacy(sentence: str, entities: tuple) -> str:
