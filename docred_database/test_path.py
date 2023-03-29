@@ -176,14 +176,14 @@ def find_entities(entity_given: str, dict_dependencies: dict)-> list:
                                     k_key_2 = key_list[key_list.index(k_key) + 1]
                                     print(f"k_key: {k_key}")
                                     print(f"k_key_2: {k_key_2}")
-                                    if entity in k_key and entity_2 in k_key_2 and key not in entity_found:
+                                    if entity in k_key and entity_2 in k_key_2 and key not in entity_found and key not in stop_words:
                                         print(f"Adding {key}")
                                         possible_entities.append(key)
                         else:
                             if temp.index(key) < len(temp)-1:
                                 key_2 = temp[temp.index(key) + 1]
                                 print(f"key_2: {key_2}")
-                                if entity in key and entity_2 in key_2 and key not in entity_found:
+                                if entity in key and entity_2 in key_2 and key not in entity_found and key not in stop_words:
                                     print(f"Adding {key}")
                                     possible_entities.append(key)
             entity_found = possible_entities
