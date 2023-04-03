@@ -20,7 +20,6 @@ class Node:
 
     def __init__(self, nested_list, father=None):
         if len(nested_list) == 1: 
-            self.pos = nested_list[0].split(' ')[0]
             self.label = nested_list[0].split(' ')[1]
             self.father = father
             self.children = []
@@ -266,19 +265,20 @@ if __name__ == '__main__':
     # sentence = "Gov. Mitt Romney of Massachusetts has also proposed a bill to buy 500,000 of the computers for his state 's children ."
 
     nested_list = constituency(sentence)
-    entities_list = find_entities(sentence)
-    print(f"Lista de entidades: {entities_list}")
-    combinations = all_combinations_entities(entities_list)
-    print(f"Lista de combinações: {combinations}")
+    print(nested_list, type(nested_list))
+    # entities_list = find_entities(sentence)
+    # print(f"Lista de entidades: {entities_list}")
+    # combinations = all_combinations_entities(entities_list)
+    # print(f"Lista de combinações: {combinations}")
 
-    root = Node(nested_list)
+    # root = Node(nested_list)
 
-    aggregate_NNP(root)
+    # aggregate_NNP(root)
 
-    for pair_entities in combinations:
-        print(f"Pair entities: entity 1 = {pair_entities[0]}, entity 2 = {pair_entities[1]}")
-        predicate = find_relation_between_entities(root, (pair_entities[0], pair_entities[1]))
-        print(f"Printando resultado da find_predicate: {predicate}")
+    # for pair_entities in combinations:
+    #     print(f"Pair entities: entity 1 = {pair_entities[0]}, entity 2 = {pair_entities[1]}")
+    #     predicate = find_relation_between_entities(root, (pair_entities[0], pair_entities[1]))
+    #     print(f"Printando resultado da find_predicate: {predicate}")
         
-    root.print()
+    # root.print()
 #  Calcular precision e recall https://en.wikipedia.org/wiki/Precision_and_recall

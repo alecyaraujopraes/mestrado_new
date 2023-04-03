@@ -1,89 +1,101 @@
-import spacy
 import argparse
 import csv
+import itertools
 
+import spacy
+from Levenshtein import jaro_winkler
 
 nlp = spacy.load("en_core_web_sm")
-nlp.add_pipe("merge_noun_chunks")
-
 
 argParser = argparse.ArgumentParser()
 argParser.add_argument("-s", "--sentence", help="Complete sentence")
-argParser.add_argument("-e0", "--entities0", help="Entity 0")
-argParser.add_argument("-e1", "--entities1", help="Entity 1")
-argParser.add_argument("-r", "--relation_annotated", help="Relation between entities")
+# argParser.add_argument("-e0", "--entities0", help="Entity 0")
+# argParser.add_argument("-e1", "--entities1", help="Entity 1")
+# argParser.add_argument("-r", "--relation_annotated", help="Relation between entities")
 
-args = argParser.parse_args()
-
-def find_entities(entity_given: str, dict_dependencies: dict)-> list:
-    if entity_given in dict_dependencies:
-        entity_given = [entity_found]
-    else:
-        for k, v in dict_dependencies.items():
-            if entity_given in k:
-                entity_found = [k]
-
-    if entity_found == None:
-        possible_entities = []
-        x = entity_given.split()
-        for entity in x:
-            for k,v in dict_dependencies.items():
-                if entity in k:
-                    possible_entities.append(k)
-        entity_found = possible_entities
-
-    return entity_found
+# args = argParser.parse_args()
+# doc = nlp(args.sentence)
 
 
-def path(sentence: str, start: str, end: str, list_path=[]):
+def get_dict_dependencies(sentence: str)-> dict:
     doc = nlp(sentence)
     dict_dependencies = {}
 
     for token in doc:
         dict_dependencies[token.text] = [child.text for child in token.children]
     
-    list_entity_0 = find_entities(start, dict_dependencies)
-    list_entity_1 = find_entities(end, dict_dependencies)
-
-    for entity_0 in list_entity_0:
-        for entity_1 in list_entity_1:
-
-            list_path = list_path + [entity_0]
-            if entity_1 == entity_0:
-                return list_path
-            else:
-                if not dict_dependencies.get(entity_0):
-                    list_path = list(set(list_path) - set([entity_0]))
-                    return list_path
-                else:
-                    for n in dict_dependencies.get(entity_0):
-                        path2 = path(n, entity_1, list_path=list_path)
-                        if len(path2) > len(list_path): return path2
-                    list_path = list(set(list_path) - set([entity_0]))
-                    return list_path
+    return dict_dependencies
 
 
-def find_relation_between_entities_spacy(sentence: str, entities: tuple) -> str:
-    entity_1 = entities[0]
-    entity_2 = entities[1]
+def find_entities(text: str)-> list:
+    doc = nlp(text)
+    list_entities = []
+    
+    for entity in doc.ents:
+        str1 = entity.text
+        list_entities.append(str1)
+    return list_entities
 
-    path_list = path(sentence, entity_1, entity_2, list_path=[])
-    print(f"Path list: {path_list}")
 
-    if entity_1 in path_list and entity_2 in path_list:
-        path_list.remove(entity_1)
-        path_list.remove(entity_2)
-        path_str = ' '.join([str(elem) for elem in path_list])
-        return path_str
+def find_nodes(sentence: str)-> list:
+    nlp.add_pipe("merge_noun_chunks")
+    doc = nlp(sentence)
 
-tuple_of_entities = (args.entities0, args.entities1)
-# print(f"Entidades: {tuple_of_entities}")
+    noun_phrases = [chunk.text for chunk in doc.noun_chunks]
 
-relation = find_relation_between_entities_spacy(args.sentence, tuple_of_entities)
-print(relation)
-relation_annotated = args.relation_annotated
+    return noun_phrases
 
-print(f"Frase: {args.sentence}, Entidades: {tuple_of_entities}, Relação_encontrada_por_mim: {relation}, Relação_encontrada_no_benchmark: {relation_annotated}")
+
+def get_nodes_entities(list_entities: str, list_nodes: str)-> dict:
+    dict_nodes = {}
+    for entity in list_entities:
+        compare = 0
+        for node in list_nodes:
+            compare = jaro_winkler(entity, node)
+            if compare_old < compare:
+                compare_old = compare
+                node_choose = node
+        dict_nodes[f"{node}"] = entity
+    
+    return dict_nodes
+
+
+
+def combination_between_noun_phrases(list_entities: list)-> list:
+    combinations_list = []
+    combinations = itertools.combinations(list_entities, 2)
+    for combination in combinations:
+        combinations_list.append(combination)
+
+    return combinations_list
+
+
+def path(sentence: str, list_path=[]):
+    dict_dependencies = get_dict_dependencies(sentence)
+
+    list_entities, dict_ent_nodes = find_entities_and_noun_phrases(sentence)
+
+    print(list_entities)
+    print(dict_ent_nodes)
+
+    # combination_list = combination_between_noun_phrases(list_entities)
+
+    # for combination in combination_list:
+    #     entity_0 = dict_ent_nodes.get(combination[0])
+    #     entity_1 = dict_ent_nodes.get(combination[1])
+
+# path("Zest Airways , Inc. operated as AirAsia Zest ( formerly Asian Spirit and Zest Air ) , was a low - cost airline based at the Ninoy Aquino International Airport in Pasay City , Metro Manila in the Philippines .")
+
+# tuple_of_entities = (args.entities0, args.entities1)
+# # print(f"Entidades: {tuple_of_entities}")
+
+# dict_dependencies = get_dict_dependencies(args.sentence)
+
+# relation = find_relation_between_entities_spacy(args.sentence, tuple_of_entities)
+# print(relation)
+# relation_annotated = args.relation_annotated
+
+# print(f"Frase: {args.sentence}, Entidades: {tuple_of_entities}, Relação_encontrada_por_mim: {relation}, Relação_encontrada_no_benchmark: {relation_annotated}")
 
 
 # if relation:

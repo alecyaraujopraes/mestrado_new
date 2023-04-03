@@ -134,16 +134,7 @@ def path(begin, final, list_path=[]):
 
 # print(r)
 
-# Usar semelhança de string e nós adjacentes para descobrir quais entidades no grafo.
-# Alternativas: usar o string match e achar a string mais semelhante https://maxbachmann.github.io/Levenshtein/levenshtein.html#distance
-# Ver se é possível juntar nós adjacentes para formar as entidades.
-# Procurar por distâncias normalizadas entre strings, posso criar uma normalização dividindo pelo número de caracteres na string.
-# https://www.analyticsvidhya.com/blog/2021/02/a-simple-guide-to-metrics-for-calculating-string-similarity/
-# https://en.wikipedia.org/wiki/Levenshtein_distance
-# https://github.com/explosion/spaCy/blob/master/spacy/glossary.py
-#  considerar caminhos que tenham labels adequados, considerar caminhos bidirecionais
-# https://medium.com/@dhartidhami/understanding-bert-word-embeddings-7dc4d2ea54ca
-#  usar o bert pra saber se os camihos são relevantes ou não
+
 
 def find_entities(entity_given: str, dict_dependencies: dict)-> list:
     if entity_given in dict_dependencies:
@@ -193,3 +184,5 @@ def find_entities(entity_given: str, dict_dependencies: dict)-> list:
 enti = find_entities("Asian Spirit and Zest Air", dict_dependencies)
 
 print(enti)
+
+
