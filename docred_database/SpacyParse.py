@@ -13,8 +13,7 @@ argParser.add_argument("-s", "--sentence", help="Complete sentence")
 # argParser.add_argument("-e1", "--entities1", help="Entity 1")
 # argParser.add_argument("-r", "--relation_annotated", help="Relation between entities")
 
-# args = argParser.parse_args()
-# doc = nlp(args.sentence)
+args = argParser.parse_args()
 
 
 def get_dict_dependencies(sentence: str)-> dict:
@@ -34,6 +33,7 @@ def find_entities(text: str)-> list:
     for entity in doc.ents:
         str1 = entity.text
         list_entities.append(str1)
+
     return list_entities
 
 
@@ -55,10 +55,9 @@ def get_nodes_entities(list_entities: str, list_nodes: str)-> dict:
             if compare_old < compare:
                 compare_old = compare
                 node_choose = node
-        dict_nodes[f"{node}"] = entity
-    
-    return dict_nodes
+        dict_nodes[f"{node_choose}"] = entity
 
+    return dict_nodes
 
 
 def combination_between_noun_phrases(list_entities: list)-> list:
@@ -71,13 +70,7 @@ def combination_between_noun_phrases(list_entities: list)-> list:
 
 
 def path(sentence: str, list_path=[]):
-    dict_dependencies = get_dict_dependencies(sentence)
-
-    list_entities, dict_ent_nodes = find_entities_and_noun_phrases(sentence)
-
-    print(list_entities)
-    print(dict_ent_nodes)
-
+    return 
     # combination_list = combination_between_noun_phrases(list_entities)
 
     # for combination in combination_list:
@@ -86,10 +79,20 @@ def path(sentence: str, list_path=[]):
 
 # path("Zest Airways , Inc. operated as AirAsia Zest ( formerly Asian Spirit and Zest Air ) , was a low - cost airline based at the Ninoy Aquino International Airport in Pasay City , Metro Manila in the Philippines .")
 
-# tuple_of_entities = (args.entities0, args.entities1)
-# # print(f"Entidades: {tuple_of_entities}")
+sentence = args.sentence
 
-# dict_dependencies = get_dict_dependencies(args.sentence)
+list_entities = find_entities(sentence)
+dict_dependencies = get_dict_dependencies()
+list_nodes = find_nodes(sentence)
+dict_nodes = get_nodes_entities(list_entities, list_nodes)
+combination_noun_phrases = combination_between_noun_phrases(list_entities)
+
+for tuple_nodes in combination_noun_phrases:
+    entity_0 = dict_nodes.get(f"{tuple_nodes[0]}")
+    entity_1 = dict_nodes.get(f"{tuple_nodes[1]}")
+    tuple_of_entities = (entity_0, entity_1)
+    print(f"Entidades: {tuple_of_entities}")
+
 
 # relation = find_relation_between_entities_spacy(args.sentence, tuple_of_entities)
 # print(relation)
