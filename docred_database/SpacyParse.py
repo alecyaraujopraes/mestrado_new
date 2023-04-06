@@ -23,14 +23,14 @@ def get_dict_dependencies(sentence: str)-> dict:
 
     for token in doc:
         dict_dependencies[token.text] = [child.text for child in token.children]
-    
+
     return dict_dependencies
 
 
 def find_entities(text: str)-> list:
     doc = nlp(text)
     list_entities = []
-    
+
     for entity in doc.ents:
         str1 = entity.text
         list_entities.append(str1)
@@ -80,11 +80,18 @@ def find_father(entity: str, dependencies: dict)-> list:
 
 class Node:
 
-    def __init__(self, noun_phrases, dict_dependencies):
-        for node in noun_phrases:
-            self.name = node
-            self.father = find_father(self, dict_dependencies)
-            self.children = dict_dependencies.get(node)
+    def __init__(self, name):
+        self.name = name
+        self.father = None
+        self.children = []
+
+    def set_children(self, children):
+        self.children = children
+        for c in children:
+            c.set_father(self)
+
+    def set_father(self, father):
+        self.father = father
 
     def search(self, name_of_node=None):
         for item in self:
@@ -121,11 +128,23 @@ print(f"Dict nodes: {dict_nodes}")
 combination_noun_phrases = combination_between_noun_phrases(list_entities)
 print(f"Combination noun phrases: {combination_noun_phrases}")
 
+
+nodes = {}
+for n in [Node(k) for k,v in dict_dependencies.items()]: nodes[n.name] = n
+for k,n in nodes:
+    children = dict_dependencies[n.name]
+    n.set_children([nodes[c] for c in children])
+
+
+
+
 for tuple_nodes in combination_noun_phrases:
     entity_0 = dict_nodes.get(f"{tuple_nodes[0]}")
     entity_1 = dict_nodes.get(f"{tuple_nodes[1]}")
     tuple_of_entities = (entity_0, entity_1)
     print(f"Entidades: {tuple_of_entities}")
+
+
 
     root = Node(list_nodes, dict_dependencies)
 
