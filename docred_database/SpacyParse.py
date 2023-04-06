@@ -17,6 +17,7 @@ args = argParser.parse_args()
 
 
 def get_dict_dependencies(sentence: str)-> dict:
+    nlp.add_pipe("merge_noun_chunks")
     doc = nlp(sentence)
     dict_dependencies = {}
 
@@ -69,15 +70,49 @@ def combination_between_noun_phrases(list_entities: list)-> list:
     return combinations_list
 
 
-def path(sentence: str, list_path=[]):
-    return 
-    # combination_list = combination_between_noun_phrases(list_entities)
+def find_father(entity: str, dependencies: dict)-> list:
+    father = []
 
-    # for combination in combination_list:
-    #     entity_0 = dict_ent_nodes.get(combination[0])
-    #     entity_1 = dict_ent_nodes.get(combination[1])
+    for k,v in dependencies:
+        if entity in v:
+            father.append(k)
 
-# path("Zest Airways , Inc. operated as AirAsia Zest ( formerly Asian Spirit and Zest Air ) , was a low - cost airline based at the Ninoy Aquino International Airport in Pasay City , Metro Manila in the Philippines .")
+    return father
+
+class Node:
+
+    def __init__(self, noun_phrases, children, father):
+        if len(noun_phrases) == 1:
+            self.name = noun_phrases
+            self.father = father
+            self.children = children
+        else: 
+            for node in noun_phrases:
+                Node([node], self, father=find_father(node, dict_dependencies), children=dict_dependencies.get(node))
+
+
+    def search(self, name=None):
+        ???
+        return [n for n in [self] + [c2 for c in self.children for c2 in c.search(pos=pos, label=label)]
+                if (n.pos == pos or not pos) and (n.label == label or not label)]
+
+
+    def path(self, to, path=[]):
+        path = path + [self]
+        neighbours = self.children + [self.father] if self.father else []
+        neighbours = list(set(neighbours) - set(path))
+        if to == self:
+            return path
+        else:
+            if not neighbours:
+                path = list(set(path) - set([self]))
+                return path
+            else:
+                for n in neighbours:
+                    path2 = n.path(to, path=path)
+                    if len(path2) > len(path): return path2
+                path = list(set(path) - set([self]))
+                return path
 
 sentence = args.sentence
 
@@ -93,10 +128,17 @@ for tuple_nodes in combination_noun_phrases:
     tuple_of_entities = (entity_0, entity_1)
     print(f"Entidades: {tuple_of_entities}")
 
+    root = Node(list_nodes)
 
-# relation = find_relation_between_entities_spacy(args.sentence, tuple_of_entities)
-# print(relation)
-# relation_annotated = args.relation_annotated
+    node_0 = root.search()
+    node_1 = root.search()
+
+    path = node_0.path(node_1)
+
+
+
+
+
 
 # print(f"Frase: {args.sentence}, Entidades: {tuple_of_entities}, Relação_encontrada_por_mim: {relation}, Relação_encontrada_no_benchmark: {relation_annotated}")
 
