@@ -39,7 +39,6 @@ def find_entities(text: str)-> list:
 
 
 def find_nodes(sentence: str)-> list:
-    nlp.add_pipe("merge_noun_chunks")
     doc = nlp(sentence)
 
     noun_phrases = [chunk.text for chunk in doc.noun_chunks]
@@ -50,7 +49,7 @@ def find_nodes(sentence: str)-> list:
 def get_nodes_entities(list_entities: str, list_nodes: str)-> dict:
     dict_nodes = {}
     for entity in list_entities:
-        compare = 0
+        compare_old = 0
         for node in list_nodes:
             compare = jaro_winkler(entity, node)
             if compare_old < compare:
@@ -73,7 +72,7 @@ def combination_between_noun_phrases(list_entities: list)-> list:
 def find_father(entity: str, dependencies: dict)-> list:
     father = []
 
-    for k,v in dependencies:
+    for k,v in dependencies.items():
         if entity in v:
             father.append(k)
 
@@ -81,21 +80,16 @@ def find_father(entity: str, dependencies: dict)-> list:
 
 class Node:
 
-    def __init__(self, noun_phrases, children, father):
-        if len(noun_phrases) == 1:
-            self.name = noun_phrases
-            self.father = father
-            self.children = children
-        else: 
-            for node in noun_phrases:
-                Node([node], self, father=find_father(node, dict_dependencies), children=dict_dependencies.get(node))
+    def __init__(self, noun_phrases, dict_dependencies):
+        for node in noun_phrases:
+            self.name = node
+            self.father = find_father(self, dict_dependencies)
+            self.children = dict_dependencies.get(node)
 
-
-    def search(self, name=None):
-        ???
-        return [n for n in [self] + [c2 for c in self.children for c2 in c.search(pos=pos, label=label)]
-                if (n.pos == pos or not pos) and (n.label == label or not label)]
-
+    def search(self, name_of_node=None):
+        for item in self:
+            if item.name == name_of_node:
+                return item
 
     def path(self, to, path=[]):
         path = path + [self]
@@ -117,10 +111,15 @@ class Node:
 sentence = args.sentence
 
 list_entities = find_entities(sentence)
-dict_dependencies = get_dict_dependencies()
+print(f"List entities: {list_entities}")
+dict_dependencies = get_dict_dependencies(sentence)
+print(f"Dict dependencies: {dict_dependencies}")
 list_nodes = find_nodes(sentence)
+print(f"List nodes: {list_nodes}")
 dict_nodes = get_nodes_entities(list_entities, list_nodes)
+print(f"Dict nodes: {dict_nodes}")
 combination_noun_phrases = combination_between_noun_phrases(list_entities)
+print(f"Combination noun phrases: {combination_noun_phrases}")
 
 for tuple_nodes in combination_noun_phrases:
     entity_0 = dict_nodes.get(f"{tuple_nodes[0]}")
@@ -128,12 +127,14 @@ for tuple_nodes in combination_noun_phrases:
     tuple_of_entities = (entity_0, entity_1)
     print(f"Entidades: {tuple_of_entities}")
 
-    root = Node(list_nodes)
+    root = Node(list_nodes, dict_dependencies)
 
     node_0 = root.search()
     node_1 = root.search()
 
     path = node_0.path(node_1)
+
+    print(path)
 
 
 
