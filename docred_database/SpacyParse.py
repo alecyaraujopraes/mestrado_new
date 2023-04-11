@@ -55,7 +55,7 @@ def get_nodes_entities(list_entities: str, list_nodes: str)-> dict:
             if compare_old < compare:
                 compare_old = compare
                 node_choose = node
-        dict_nodes[f"{node_choose}"] = entity
+        dict_nodes[f"{entity}"] = node_choose
 
     return dict_nodes
 
@@ -128,51 +128,43 @@ print(f"Dict nodes: {dict_nodes}")
 combination_noun_phrases = combination_between_noun_phrases(list_entities)
 print(f"Combination noun phrases: {combination_noun_phrases}")
 
-
 nodes = {}
 for n in [Node(k) for k,v in dict_dependencies.items()]: nodes[n.name] = n
-for k,n in nodes:
+for k,n in nodes.items():
     children = dict_dependencies[n.name]
     n.set_children([nodes[c] for c in children])
 
-
-
-
 for tuple_nodes in combination_noun_phrases:
+    print(f"Nós: {tuple_nodes}")
     entity_0 = dict_nodes.get(f"{tuple_nodes[0]}")
     entity_1 = dict_nodes.get(f"{tuple_nodes[1]}")
     tuple_of_entities = (entity_0, entity_1)
     print(f"Entidades: {tuple_of_entities}")
 
+    node_0 = nodes.get(f"{tuple_nodes[0]}")
+    node_1 = nodes.get(f"{tuple_nodes[1]}")
+
+    path_nodes = node_0.path(node_1)
+    path = []
+    for n in path_nodes:
+        if n not in (entity_1, entity_0, node_0, node_1):
+            path.append(n.name)
+
+    relation = " ".join(path)
+
+    print(f"Frase: {args.sentence}, Entidade 0: {entity_0}, Entidade 1: {entity_1}, Relação_encontrada: {relation}")
 
 
-    root = Node(list_nodes, dict_dependencies)
+    if relation:
+        field_names = ["Frase", "Entidade 0", "Entidade 1", "Relação_encontrada"]
 
-    node_0 = root.search()
-    node_1 = root.search()
+        with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
+            dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+            writer = csv.DictWriter(f_object, fieldnames=field_names)
+            writer.writerow({'Frase': args.sentence, 'Entidade 0': entity_0, 'Entidade 1': entity_1, 'Relação_encontrada': relation})
 
-    path = node_0.path(node_1)
-
-    print(path)
-
-
-
-
-
-
-# print(f"Frase: {args.sentence}, Entidades: {tuple_of_entities}, Relação_encontrada_por_mim: {relation}, Relação_encontrada_no_benchmark: {relation_annotated}")
-
-
-# if relation:
-#     field_names = ["Frase", "Entidades", "Relação_encontrada_por_mim", "Relação_encontrada_no_benchmark"]
-
-#     with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
-#         dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-#         writer = csv.DictWriter(f_object, fieldnames=field_names)
-#         writer.writerow({'Frase': args.sentence, 'Entidades': tuple_of_entities, 'Relação_encontrada_por_mim': relation, 'Relação_encontrada_no_benchmark': relation_annotated})
-
-#         f_object.close()
-#     print("Saved relation in csv")
+            f_object.close()
+        print("Saved relation in csv")
 
 
 # with open('test.txt', 'w') as f:
