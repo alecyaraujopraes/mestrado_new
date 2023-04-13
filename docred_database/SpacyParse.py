@@ -8,12 +8,17 @@ from Levenshtein import jaro_winkler
 nlp = spacy.load("en_core_web_sm")
 
 argParser = argparse.ArgumentParser()
-argParser.add_argument("-s", "--sentence", help="Complete sentence")
-# argParser.add_argument("-e0", "--entities0", help="Entity 0")
-# argParser.add_argument("-e1", "--entities1", help="Entity 1")
-# argParser.add_argument("-r", "--relation_annotated", help="Relation between entities")
+argParser.add_argument("-s", "--sentence", help="Complete paragraph")
 
 args = argParser.parse_args()
+
+def split_in_sentences(paragraph: str)-> list:
+    doc = nlp(paragraph)
+    sents = []
+    for sent in doc.sents:
+        sents.append(sent.text)
+
+    return sents
 
 
 def get_dict_dependencies(sentence: str)-> dict:
@@ -115,57 +120,53 @@ class Node:
                 path = list(set(path) - set([self]))
                 return path
 
-sentence = args.sentence
+paragraph = args.sentence
+sents = split_in_sentences(paragraph)
 
-list_entities = find_entities(sentence)
-print(f"List entities: {list_entities}")
-dict_dependencies = get_dict_dependencies(sentence)
-print(f"Dict dependencies: {dict_dependencies}")
-list_nodes = find_nodes(sentence)
-print(f"List nodes: {list_nodes}")
-dict_nodes = get_nodes_entities(list_entities, list_nodes)
-print(f"Dict nodes: {dict_nodes}")
-combination_noun_phrases = combination_between_noun_phrases(list_entities)
-print(f"Combination noun phrases: {combination_noun_phrases}")
+for sentence in sents:
+    list_entities = find_entities(sentence)
+    print(f"List entities: {list_entities}")
+    dict_dependencies = get_dict_dependencies(sentence)
+    print(f"Dict dependencies: {dict_dependencies}")
+    list_nodes = find_nodes(sentence)
+    print(f"List nodes: {list_nodes}")
+    dict_nodes = get_nodes_entities(list_entities, list_nodes)
+    print(f"Dict nodes: {dict_nodes}")
+    combination_noun_phrases = combination_between_noun_phrases(list_entities)
+    print(f"Combination noun phrases: {combination_noun_phrases}")
 
-nodes = {}
-for n in [Node(k) for k,v in dict_dependencies.items()]: nodes[n.name] = n
-for k,n in nodes.items():
-    children = dict_dependencies[n.name]
-    n.set_children([nodes[c] for c in children])
+    nodes = {}
+    for n in [Node(k) for k,v in dict_dependencies.items()]: nodes[n.name] = n
+    for k,n in nodes.items():
+        children = dict_dependencies[n.name]
+        n.set_children([nodes[c] for c in children])
 
-for tuple_nodes in combination_noun_phrases:
-    print(f"Nós: {tuple_nodes}")
-    entity_0 = dict_nodes.get(f"{tuple_nodes[0]}")
-    entity_1 = dict_nodes.get(f"{tuple_nodes[1]}")
-    tuple_of_entities = (entity_0, entity_1)
-    print(f"Entidades: {tuple_of_entities}")
+    for tuple_nodes in combination_noun_phrases:
+        print(f"Nós: {tuple_nodes}")
+        entity_0 = dict_nodes.get(f"{tuple_nodes[0]}")
+        entity_1 = dict_nodes.get(f"{tuple_nodes[1]}")
+        tuple_of_entities = (entity_0, entity_1)
+        print(f"Entidades: {tuple_of_entities}")
 
-    node_0 = nodes.get(f"{tuple_nodes[0]}")
-    node_1 = nodes.get(f"{tuple_nodes[1]}")
+        node_0 = nodes.get(f"{tuple_nodes[0]}")
+        node_1 = nodes.get(f"{tuple_nodes[1]}")
 
-    path_nodes = node_0.path(node_1)
-    path = []
-    for n in path_nodes:
-        if n not in (entity_1, entity_0, node_0, node_1):
-            path.append(n.name)
-
-    relation = " ".join(path)
-
-    print(f"Frase: {args.sentence}, Entidade 0: {entity_0}, Entidade 1: {entity_1}, Relação_encontrada: {relation}")
+        path_nodes = node_0.path(node_1)
+        path = []
 
 
-    if relation:
-        field_names = ["Frase", "Entidade 0", "Entidade 1", "Relação_encontrada"]
+        relation = " ".join(path)
 
-        with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
-            dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-            writer = csv.DictWriter(f_object, fieldnames=field_names)
-            writer.writerow({'Frase': args.sentence, 'Entidade 0': entity_0, 'Entidade 1': entity_1, 'Relação_encontrada': relation})
-
-            f_object.close()
-        print("Saved relation in csv")
+        print(f"Frase: {args.sentence}, Entidade 0: {entity_0}, Entidade 1: {entity_1}, Relação_encontrada: {relation}")
 
 
-# with open('test.txt', 'w') as f:
-#     f.write(r)
+        if relation:
+            field_names = ["Frase", "Entidade 0", "Entidade 1", "Relação_encontrada"]
+
+            with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
+                dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+                writer = csv.DictWriter(f_object, fieldnames=field_names)
+                writer.writerow({'Frase': args.sentence, 'Entidade 0': entity_0, 'Entidade 1': entity_1, 'Relação_encontrada': relation})
+
+                f_object.close()
+            print("Saved relation in csv")

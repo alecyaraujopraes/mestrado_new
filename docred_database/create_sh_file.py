@@ -13,12 +13,9 @@ with open(file, "r") as f:
 
 
 for item in list_obj:
-    sentence = item.get("sentences_evidence").replace("'", "\\'")
+    sentence = item.get("sentences").replace("'", "\\'")
     sentence = sentence.replace('"', '\\"')
-    
-    # entity0 = item.get("entity_0")
-    # entity1 = item.get("entity_1")
-    # relation = item.get("relation")
+
     str_line = f"""python3 docred_database/SpacyParse.py -s "{sentence}" """
 
     with open("docred_database/run_spacy.sh", "a") as my_file:
