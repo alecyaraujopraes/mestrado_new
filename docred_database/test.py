@@ -1,25 +1,18 @@
-from Levenshtein import distance, jaro_winkler
-import spacy
+import pandas as pd
 
-sentence = "Zest Airways , Inc. operated as AirAsia Zest ( formerly Asian Spirit and Zest Air ) , was a low - cost airline based at the Ninoy Aquino International Airport in Pasay City , Metro Manila in the Philippines ."
-# str1 = "Zest Air"
-# str2 = "Asian Spirit and Zest Air"
+df_docred = pd.read_csv("docred_database/docred.csv")
+df_spacy = pd.read_csv("docred_database/manual_test_spacy.csv")
 
-# print(distance(str1, str2))
-# print(max(len(str1), len(str2)))
-# print(1-(distance(str1, str2)/(max(len(str1), len(str2)))))
+for sent in df_docred["sentences"]:
+    sent_modify = sent.replace("'", "\\'")
+    sent_modify = sent_modify.replace('"', '\\"')
+    print(f"Frase: {sent}")
+    df_docred_selected = df_docred.loc[df_docred.sentences == sent, :]
+    df_spacy_selected = df_spacy.loc[df_spacy.Frase == sent_modify, :]
 
+    for line in df_docred_selected["entity_0"]:
+        print(line)
 
-# print("jaro_winkler")
-# print(jaro_winkler(str1, str2))
-nlp = spacy.load("en_core_web_sm")
-
-doc = nlp(sentence)
-
-# Analyze syntax
-print("Noun phrases:", [chunk.text for chunk in doc.noun_chunks])
-print("Verbs:", [token.lemma_ for token in doc if token.pos_ == "VERB"])
-
-# Find named entities, phrases and concepts
-for entity in doc.ents:
-    print(entity.text)
+    print(df_docred_selected)
+    print(df_spacy_selected)
+    break

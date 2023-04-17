@@ -22,7 +22,10 @@ def split_in_sentences(paragraph: str)-> list:
 
 
 def get_dict_dependencies(sentence: str)-> dict:
-    nlp.add_pipe("merge_noun_chunks")
+    try:
+        nlp.add_pipe("merge_noun_chunks")
+    except:
+        pass
     doc = nlp(sentence)
     dict_dependencies = {}
 
@@ -119,6 +122,7 @@ class Node:
                     if len(path2) > len(path): return path2
                 path = list(set(path) - set([self]))
                 return path
+                
 
 paragraph = args.sentence
 sents = split_in_sentences(paragraph)
@@ -148,25 +152,25 @@ for sentence in sents:
         tuple_of_entities = (entity_0, entity_1)
         print(f"Entidades: {tuple_of_entities}")
 
-        node_0 = nodes.get(f"{tuple_nodes[0]}")
-        node_1 = nodes.get(f"{tuple_nodes[1]}")
+        node_0 = nodes.get(f"{entity_0}")
+        node_1 = nodes.get(f"{entity_1}")
 
         path_nodes = node_0.path(node_1)
         path = []
-
+        for n in path_nodes:
+            path.append(n.name)
 
         relation = " ".join(path)
 
-        print(f"Frase: {args.sentence}, Entidade 0: {entity_0}, Entidade 1: {entity_1}, Relação_encontrada: {relation}")
-
-
         if relation:
+            print(f"Frase: {args.sentence}, Entidade_0: {entity_0}, Entidade_1: {entity_1}, Relacao_encontrada: {relation}")
+
             field_names = ["Frase", "Entidade 0", "Entidade 1", "Relação_encontrada"]
 
             with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
                 dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
                 writer = csv.DictWriter(f_object, fieldnames=field_names)
-                writer.writerow({'Frase': args.sentence, 'Entidade 0': entity_0, 'Entidade 1': entity_1, 'Relação_encontrada': relation})
+                writer.writerow({'Frase': args.sentence, 'Entidade_0': entity_0, 'Entidade_1': entity_1, 'Relacao_encontrada': relation})
 
                 f_object.close()
             print("Saved relation in csv")
