@@ -165,12 +165,12 @@ for sentence in sents:
         if relation:
             print(f"Frase: {args.sentence}, Entidade_0: {entity_0}, Entidade_1: {entity_1}, Relacao_encontrada: {relation}")
 
-            field_names = ["Frase", "Entidade 0", "Entidade 1", "Relação_encontrada"]
+            # field_names = ["Frase", "Entidade 0", "Entidade 1", "Relação_encontrada"]
 
-            with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
-                dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-                writer = csv.DictWriter(f_object, fieldnames=field_names)
-                writer.writerow({'Frase': args.sentence, 'Entidade_0': entity_0, 'Entidade_1': entity_1, 'Relacao_encontrada': relation})
+            # with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
+            #     dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+            #     writer = csv.DictWriter(f_object, fieldnames=field_names)
+            #     writer.writerow({'Frase': args.sentence, 'Entidade_0': entity_0, 'Entidade_1': entity_1, 'Relacao_encontrada': relation})
 
-                f_object.close()
-            print("Saved relation in csv")
+            #     f_object.close()
+            # print("Saved relation in csv")
