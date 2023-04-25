@@ -38,7 +38,7 @@ model = BertModel.from_pretrained('bert-base-uncased',
 model.eval()
 
 # Run the text through BERT, and collect all of the hidden states produced
-# from all 12 layers. 
+# from all 12 layers.
 with torch.no_grad():
     outputs = model(tokens_tensor, segments_tensors)
     # Evaluating the model will return a different number of objects based on 
