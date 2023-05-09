@@ -1,24 +1,9 @@
-import torch
-from transformers import BertModel, BertTokenizer
-from scipy.spatial.distance import cosine
 import csv
-from math import dist
-from functions_bert import get_convert_tokens_to_ids, create_segment_ids, create_tensor_and_tensors, creating_embedings, get_tokens
 
-paragraph = "Niklas Bergqvist ( born 6 October 1962 in Stockholm ) , is a Swedish songwriter , producer and musician .His career started in 1984 , as a founding member of the Synthpop band Shanghai , which he started along his school friends .The band released two albums and numerous singles , with their debut single ' Ballerina ' , produced by former Europe guitarist Kee Marcello .Following the success of the single , the album also gained positive attention , resulting in the band touring around Sweden .The second , and final , studio album was produced by Swedish pop star Harpo .After the band split - up in 1987 , Bergqvist formed and played in several other bands until he decided to focus more on songwriting , resulting in several releases ever since .In 2015 , he founded the independent record label Tracks of Sweden with songwriting partner Simon Johansson ."
-entity_0 = "Niklas Bergqvist"
-entity_1 = "Stockholm"
-# relation_annotated = "place of birth"
-relation_found = "born in"
-# paragraph = "Juan Guzmán ( born Hans Gutmann Guster , also known as "" Juanito "" , 28 October 1911 – 1982 ) was a German born Mexican photojournalist .He was known as a war photographer of the Spanish Civil War and later on his work with Mexican painters Frida Kahlo and Diego Rivera .Hans Gutmann was born in Cologne .In 1936 he joined the Spanish Civil War as a volunteer of the International Brigades .Gutmann later became a Spanish citizen and changed his name to Juan Guzmán .There are more than 1,300 photographs from the Spanish Civil War in the archive of Agencia EFE ( Madrid ) .His most famous image is the picture of 17-year - old Marina Ginestà standing in top of Hotel Colón in Barcelona .It is one of the most iconic photographs of the Spanish Civil War .After the war Guzmán fled to Mexico , where he arrived in 1940 .He worked for major Mexican magazines and newspapers and became a friend of Frida Kahlo with whom Guzmán shared similar political views .In the 1950s he took a large number of photographs of Kahlo and her husband Diego Rivera .Guzmán also photographed the artwork of Mexican painters like Gerardo Murillo , Jesús Reyes Ferreira and José Clemente Orozco .Juan Guzmán died in Mexico City in 1982 ."
-# entity_0 = "Frida Kahlo"
-# entity_1 = "Diego Rivera"
-# relation_annotated = "spouse"
-# relation_found = "her husband"
-# paragraph = "Mário Cravo Neto ( Salvador , April 20 , 1947 — Salvador , August 9 , 2009 ) was a Brazilian photographer , sculptor and draughtsman .Mário Cravo , son of the sculptor Mário Cravo Júnior , is considered one of the most important photographers of Brazil .Since his early life , he was in contact with circle of artists and , when an adolescent , he met with Pierre Verger , friend of his father .In 1968 , he studied for two years at the Art Students League of New York .After that , he returned to Brazil and first exhibits the sculptures created in New York at the 12th São Paulo Art Biennial .He worked mainly with black - and - white photography , and representing the religion of Candomble .In 2005 , he exhibited at Rencontres d'Arles festival .He died in 2009 in Salvador due to skin cancer .Neto is the father of Brazilian photographer Christian Cravo .","Mário Cravo Neto ( Salvador , April 20 , 1947 — Salvador , August 9 , 2009 ) was a Brazilian photographer , sculptor and draughtsman .",
-# entity_0 = "Mário Cravo Neto"
-# entity_1 = "Mário Cravo Júnior"
-# relation_annotated = "father"
+from functions_bert import (cosine_similarity, create_embeddings,
+                            create_mean_torch, euclidian_distance,
+                            get_idx_tokens_for_created_relations,
+                            get_idx_tokens_for_found_relations, get_vectors)
 
 possible_relations = {
     "P6": "head of government", 
@@ -119,105 +104,70 @@ possible_relations = {
     "P3373": "sibling"
 }
 
-for relation in possible_relations.values():
-    created_relation = entity_0 + " " + relation + " " + entity_1
+list_relations = [
+    {
+        "paragraph": "Niklas Bergqvist ( born 6 October 1962 in Stockholm ) , is a Swedish songwriter , producer and musician .His career started in 1984 , as a founding member of the Synthpop band Shanghai , which he started along his school friends .The band released two albums and numerous singles , with their debut single ' Ballerina ' , produced by former Europe guitarist Kee Marcello .Following the success of the single , the album also gained positive attention , resulting in the band touring around Sweden .The second , and final , studio album was produced by Swedish pop star Harpo .After the band split - up in 1987 , Bergqvist formed and played in several other bands until he decided to focus more on songwriting , resulting in several releases ever since .In 2015 , he founded the independent record label Tracks of Sweden with songwriting partner Simon Johansson .",
+        "entity_0": "Niklas Bergqvist",
+        "entity_1": "Stockholm",
+        "relation_annotated": "place of birth",
+        "relation_found": "born in",
+    },
+    {
+        "paragraph": "Juan Guzmán ( born Hans Gutmann Guster , also known as "" Juanito "" , 28 October 1911 – 1982 ) was a German born Mexican photojournalist .He was known as a war photographer of the Spanish Civil War and later on his work with Mexican painters Frida Kahlo and Diego Rivera .Hans Gutmann was born in Cologne .In 1936 he joined the Spanish Civil War as a volunteer of the International Brigades .Gutmann later became a Spanish citizen and changed his name to Juan Guzmán .There are more than 1,300 photographs from the Spanish Civil War in the archive of Agencia EFE ( Madrid ) .His most famous image is the picture of 17-year - old Marina Ginestà standing in top of Hotel Colón in Barcelona .It is one of the most iconic photographs of the Spanish Civil War .After the war Guzmán fled to Mexico , where he arrived in 1940 .He worked for major Mexican magazines and newspapers and became a friend of Frida Kahlo with whom Guzmán shared similar political views .In the 1950s he took a large number of photographs of Kahlo and her husband Diego Rivera .Guzmán also photographed the artwork of Mexican painters like Gerardo Murillo , Jesús Reyes Ferreira and José Clemente Orozco .Juan Guzmán died in Mexico City in 1982 .",
+        "entity_0": "Frida Kahlo",
+        "entity_1": "Diego Rivera",
+        "relation_annotated": "spouse",
+        "relation_found": "her husband",
+    },
+    {
+        "paragraph": "Mário Cravo Neto ( Salvador , April 20 , 1947 — Salvador , August 9 , 2009 ) was a Brazilian photographer , sculptor and draughtsman .Mário Cravo , son of the sculptor Mário Cravo Júnior , is considered one of the most important photographers of Brazil .Since his early life , he was in contact with circle of artists and , when an adolescent , he met with Pierre Verger , friend of his father .In 1968 , he studied for two years at the Art Students League of New York .After that , he returned to Brazil and first exhibits the sculptures created in New York at the 12th São Paulo Art Biennial .He worked mainly with black - and - white photography , and representing the religion of Candomble .In 2005 , he exhibited at Rencontres d'Arles festival .He died in 2009 in Salvador due to skin cancer .Neto is the father of Brazilian photographer Christian Cravo .","Mário Cravo Neto ( Salvador , April 20 , 1947 — Salvador , August 9 , 2009 ) was a Brazilian photographer , sculptor and draughtsman .",
+        "entity_0": "Mário Cravo Neto",
+        "entity_1": "Mário Cravo Júnior",
+        "relation_annotated": "father",
+        "relation_found": "",
+    },
+]
 
-    token_vecs_sum = []
-    idx_tokens = []
-    tokens = get_tokens(created_relation)
-    tokens_ids = get_convert_tokens_to_ids(tokens)
-    segments_ids = create_segment_ids(tokens)
-    tensor, tensors = create_tensor_and_tensors(tokens_ids, segments_ids)
-    embeddings = creating_embedings(tensor, tensors)
+for item in list_relations:
+    entity_0 = item.get("entity_0")
+    entity_1 = item.get("entity_1")
+    paragraph = item.get("paragraph")
+    relation_found = item.get("relation_found")
 
-    token_vecs_sum = []
-    # Sum the vectors from the last four layers.
-    for token in embeddings:
-        sum_vec = torch.sum(token[-4:], dim =0)
-        token_vecs_sum.append(sum_vec)
+    for relation in possible_relations.values():
+        created_relation = entity_0 + " " + relation + " " + entity_1
+        # created_relation = "Niklas Bergqvist was born in Stockholm"
+        # created_relation = "Niklas born in Stockholm"
 
-    for i, token_str in enumerate(tokens):
-        if relation == "subclass of":
-            size_relation = 3
-            if token_str == "sub":
-                tmp_list = range(i, i + size_relation, 1)
-                idx_tokens = tmp_list
+        tokens, tokens_ids, segments_ids, tensor, tensors, embeddings, token_vecs_sum = create_embeddings(created_relation)
+        idx_tokens = get_idx_tokens_for_created_relations(tokens, relation)
+        print(f"idx_tokens: {idx_tokens}")
+        token_vecs_sum_relation = get_vectors(idx_tokens, token_vecs_sum)
+        sente_embedding = create_mean_torch(token_vecs_sum_relation)
 
-        if relation == "mouth of the watercourse":
-            size_relation = 6
-            if token_str == "mouth":
-                tmp_list = range(i, i + size_relation, 1)
-                idx_tokens = tmp_list
+        tokens_wc, tokens_ids_wc, segments_ids_wc, tensor_wc, tensors_wc, embeddings_wc, token_vecs_sum_wc = create_embeddings(relation)
+        idx_tokens_wc = range(0, len(tokens_wc)-1, 1)
+        sente_embedding_wc = create_mean_torch(token_vecs_sum_wc)
+        
 
-        else:
-            size_relation = len(relation.split(" "))
-            if token_str == relation.split(" ")[0]:
-                if size_relation == 1:
-                    idx_tokens = [i]
-                else:
-                    tmp_list = range(i, i + size_relation, 1)
-                    idx_tokens = tmp_list
-    # print(f"idx_tokens: {idx_tokens}")
+        relation_found_r = entity_0 + " " + relation_found + " " + entity_1
+        tokens_r, tokens_ids_r, segments_ids_r, tensor_r, tensors_r, embeddings_r, token_vecs_sum_r = create_embeddings(relation_found_r)
+        idx_tokens_r = get_idx_tokens_for_found_relations(tokens_r, relation_found_r)
+        token_vecs_sum_relation_r = get_vectors(idx_tokens_r, token_vecs_sum_r)
+        sente_embedding_r = create_mean_torch(token_vecs_sum_relation_r)
 
-    token_vecs_sum_relation = []
-    for id in idx_tokens:
-        print(f"Relation created: {relation}")
-        print(f"Relation: {tokens[id]}")
-        token_vecs_sum_relation.append(token_vecs_sum[id])
+        tokens_r_wc, tokens_ids_r_wc, segments_ids_r_wc, tensor_r_wc, tensors_r_wc, embeddings_r_wc, token_vecs_sum_r_wc = create_embeddings(relation_found)
+        idx_tokens_r_wc = range(0, len(tokens_r_wc)-1, 1)
+        sente_embedding_r_wc = create_mean_torch(token_vecs_sum_r_wc)
 
-    # Compute the sentence embedding, which is the average embedding of the sentence words.
-    # sente_embedding = torch.mean(torch.stack(token_vecs_sum_relation),dim =0)
+        diff_sentences = cosine_similarity(sente_embedding, sente_embedding_r)
+        diff_relations = cosine_similarity(sente_embedding_wc, sente_embedding_r_wc)
+        dist_euclidiana = euclidian_distance(sente_embedding, sente_embedding_r)
 
-    # relation_found_r = entity_0 + " " + relation_found + " " + entity_1
-    # tokens_r = tokenizer.tokenize(relation_found_r)
-    # tokens_ids_r = tokenizer.convert_tokens_to_ids(tokens_r)
-    # segments_ids_r = [1] * len(tokens_r)
-    # tensor_r = torch.tensor([tokens_ids_r])
-    # tensors_r = torch.tensor([segments_ids_r])
+        field_names = ["created_relation", "relation_found_r", "similarity_cosine_with_context", "similarity_cosine_without_context", "dist_euclidiana"]
+        with open('docred_database/bert_cosine_similarity.csv', 'a') as f_object:
+            dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+            writer = csv.DictWriter(f_object, fieldnames=field_names)
+            writer.writerow({'created_relation': created_relation, 'relation_found_r': relation_found_r, 'similarity_cosine_with_context': diff_sentences, 'similarity_cosine_without_context': diff_relations, 'dist_euclidiana': dist_euclidiana})
 
-    # model_r = BertModel.from_pretrained('bert-base-uncased', output_hidden_states=True)
-
-    # with torch.no_grad():
-    #     outputs_r = model(tensor_r, tensors_r)
-    #     hidden_states_r = outputs_r[2]
-
-    # embeddings_r = torch.stack(hidden_states_r, dim =0)
-    # embeddings_r = torch.squeeze(embeddings_r, dim =1)
-    # embeddings_r = embeddings_r.permute(1,0,2)
-    # token_vecs_sum_r = []
-    # for token_r in embeddings_r:
-    #     sum_vec_r = torch.sum(token_r[-4:] ,dim =0)
-    #     token_vecs_sum_r.append(sum_vec_r)
-
-    # idx_tokens_r = []
-    # for i_r, token_str_r in enumerate(tokens_r):
-    #     # print(f"i_r, token_str_r: {i_r, token_str_r}")
-    #     size_relation_r = len(relation_found.split(" "))
-    #     if token_str_r == relation_found.split(" ")[0]:
-    #         if size_relation_r == 1:
-    #             idx_tokens_r=[i_r]
-    #         else:
-    #             tmp_list_r = range(i_r, i_r + size_relation_r, 1)
-    #             idx_tokens=tmp_list_r
-    # print(f"idx_tokens_r: {idx_tokens_r}")
-
-    # token_vecs_sum_relation_r = []
-    # for id_r in idx_tokens_r:
-    #     token_vecs_sum_relation_r.append(token_vecs_sum_r[id_r])
-
-    # sente_embedding_r = torch.mean(torch.stack(token_vecs_sum_r),dim =0)
-
-    # # Calculate the cosine similarity
-    # token_vecs_sum_1 = sente_embedding
-    # token_vecs_sum_2 = sente_embedding_r
-    # diff_sentences = 1 - cosine(token_vecs_sum_1, token_vecs_sum_2)
-    # dist_euclidiana = dist(token_vecs_sum_1,token_vecs_sum_2)
-    # print(f'Vector similarity for {created_relation, relation_found_r} meanings:  %.2f' % diff_sentences)
-
-    # field_names = ["created_relation", "relation_found_r", "similarity_cosine", "dist_euclidiana"]
-    # with open('docred_database/bert_cosine_similarity.csv', 'a') as f_object:
-    #     dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-    #     writer = csv.DictWriter(f_object, fieldnames=field_names)
-    #     writer.writerow({'created_relation': created_relation, 'relation_found_r': relation_found_r, 'similarity_cosine': diff_sentences, 'dist_euclidiana': dist_euclidiana})
-
-    #     f_object.close()
+            f_object.close()
