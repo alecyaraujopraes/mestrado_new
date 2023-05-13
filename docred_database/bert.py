@@ -169,12 +169,13 @@ for item in list_relations:
 
         diff_sentences = cosine_similarity(sente_embedding, sente_embedding_r)
         diff_relations = cosine_similarity(sente_embedding_wc, sente_embedding_r_wc)
-        dist_euclidiana = euclidian_distance(sente_embedding, sente_embedding_r)
+        dist_euclidiana_context = euclidian_distance(sente_embedding, sente_embedding_r)
+        dist_euclidiana_wc = euclidian_distance(sente_embedding_wc, sente_embedding_r_wc)
 
-        field_names = ["created_relation", "relation_found_r", "similarity_cosine_with_context", "similarity_cosine_without_context", "dist_euclidiana"]
+        field_names = ["created_relation", "relation_found_r", "similarity_cosine_with_context", "similarity_cosine_without_context", "dist_euclidiana_context", "dist_euclidiana_wc"]
         with open('docred_database/bert_similarities.csv', 'a') as f_object:
             dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
             writer = csv.DictWriter(f_object, fieldnames=field_names)
-            writer.writerow({'created_relation': created_relation, 'relation_found_r': relation_found_r, 'similarity_cosine_with_context': diff_sentences, 'similarity_cosine_without_context': diff_relations, 'dist_euclidiana': dist_euclidiana})
+            writer.writerow({'created_relation': created_relation, 'relation_found_r': relation_found_r, 'similarity_cosine_with_context': diff_sentences, 'similarity_cosine_without_context': diff_relations, 'dist_euclidiana_context': dist_euclidiana_context, "dist_euclidiana_wc": dist_euclidiana_wc})
 
             f_object.close()
