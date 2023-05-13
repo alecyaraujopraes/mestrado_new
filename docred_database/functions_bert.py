@@ -7,7 +7,7 @@ from transformers import BertModel, BertTokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
 
-def get_tokens(sentence: str):
+def get_tokens(sentence: str)-> list:
     # Preparing the inputs for a model. Split the sentence into tokens.
     tokens = tokenizer.tokenize(sentence)
     return tokens
@@ -75,33 +75,15 @@ def create_embeddings(sentence: str):
     return tokens, tokens_ids, segments_ids, tensor, tensors, embeddings, token_vecs_sum
 
 
-def get_idx_tokens_for_created_relations(tokens, relation):
+def get_idx_tokens_for_created_relations(tokens, created_relation):
+    tokens_to_found = get_tokens(created_relation)
     idx_tokens = []
-    for i, token_str in enumerate(tokens):
-        if relation == "subclass of":
-            size_token = 3
-            if token_str == "sub":
-                idx_tokens = range(i, i + size_token, 1)
-                return idx_tokens
-            
-        if relation == "mouth of the watercourse":
-            size_token = 6
-            if token_str == "mouth":
-                idx_tokens = range(i, i + size_token, 1)
-                return idx_tokens
 
-        if relation == "dissolved, abolished or demolished":
-            print("enter correct if")
-            size_token = 5
-            if token_str == "dissolved":
-                idx_tokens = range(i, i + size_token, 1)
-                return idx_tokens
-        else:
-            size_token = len(relation.split(" "))
-            if token_str == relation.split(" ")[0]:
-                idx_tokens = range(i, i + size_token, 1)
-                return idx_tokens
-    
+    for i, token in enumerate(tokens):
+        if token in tokens_to_found:
+            idx_tokens.append(i)
+
+    return idx_tokens
 
 
 def get_vectors(idx_tokens, token_vecs_sum):
