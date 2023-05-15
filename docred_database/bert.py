@@ -145,37 +145,32 @@ for item in list_relations:
     for relation in possible_relations.values():
         created_relation = entity_0 + " " + relation + " " + entity_1
 
-        tokens, tokens_ids, segments_ids, tensor, tensors, embeddings, token_vecs_sum = create_embeddings(sentence)
-        idx_tokens = get_idx_tokens_for_created_relations(tokens, created_relation)
-        # print(f"idx_tokens: {idx_tokens}")
-        # print(f"tokens_ids: {tokens_ids}")
-        token_vecs_sum_relation = get_vectors(idx_tokens, token_vecs_sum)
-        sente_embedding = create_mean_torch(token_vecs_sum_relation)
+        tokens_cr, tokens_ids_cr, segments_ids_cr, tensor_cr, tensors_cr, embeddings_cr, token_vecs_sum_cr = create_embeddings(created_relation)
+        created_relation_embedding = create_mean_torch(token_vecs_sum_cr)
 
-        tokens_wc, tokens_ids_wc, segments_ids_wc, tensor_wc, tensors_wc, embeddings_wc, token_vecs_sum_wc = create_embeddings(relation)
-        idx_tokens_wc = range(0, len(tokens_wc)-1, 1)
-        sente_embedding_wc = create_mean_torch(token_vecs_sum_wc)
-        
+        tokens_sent, tokens_ids_sent, segments_ids_sent, tensor_sent, tensors_sent, embeddings_sent, token_vecs_sum_sent = create_embeddings(sent)
+        sent_embedding = create_mean_torch(token_vecs_sum_sent)
 
-        relation_found_r = entity_0 + " " + relation_found + " " + entity_1
-        tokens_r, tokens_ids_r, segments_ids_r, tensor_r, tensors_r, embeddings_r, token_vecs_sum_r = create_embeddings(relation_found_r)
-        idx_tokens_r = get_idx_tokens_for_found_relations(tokens_r, relation_found_r)
-        token_vecs_sum_relation_r = get_vectors(idx_tokens_r, token_vecs_sum_r)
-        sente_embedding_r = create_mean_torch(token_vecs_sum_relation_r)
+        tokens_r, tokens_ids_r, segments_ids_r, tensor_r, tensors_r, embeddings_r, token_vecs_sum_r = create_embeddings(relation)
+        sente_embedding_r = create_mean_torch(token_vecs_sum_r)
+
+        # relation_found_r = entity_0 + " " + relation_found + " " + entity_1
+        tokens_fr, tokens_ids_fr, segments_ids_fr, tensor_fr, tensors_fr, embeddings_fr, token_vecs_sum_fr = create_embeddings(relation_found)
+        sente_embedding_fr = create_mean_torch(token_vecs_sum_fr)
 
         tokens_r_wc, tokens_ids_r_wc, segments_ids_r_wc, tensor_r_wc, tensors_r_wc, embeddings_r_wc, token_vecs_sum_r_wc = create_embeddings(relation_found)
         idx_tokens_r_wc = range(0, len(tokens_r_wc)-1, 1)
         sente_embedding_r_wc = create_mean_torch(token_vecs_sum_r_wc)
 
-        diff_sentences = cosine_similarity(sente_embedding, sente_embedding_r)
-        diff_relations = cosine_similarity(sente_embedding_wc, sente_embedding_r_wc)
-        dist_euclidiana_context = euclidian_distance(sente_embedding, sente_embedding_r)
-        dist_euclidiana_wc = euclidian_distance(sente_embedding_wc, sente_embedding_r_wc)
+        diff_sentences = cosine_similarity(created_relation_embedding, sent_embedding)
+        diff_relations = cosine_similarity(sente_embedding_r, sente_embedding_fr)
+        dist_euclidiana_sents = euclidian_distance(created_relation_embedding, sent_embedding)
+        dist_euclidiana_relations = euclidian_distance(sente_embedding_r, sente_embedding_fr)
 
-        field_names = ["created_relation", "relation_found_r", "similarity_cosine_with_context", "similarity_cosine_without_context", "dist_euclidiana_context", "dist_euclidiana_wc"]
+        field_names = ["created_relation", "relation_found", "similarity_cosine_sents", "similarity_cosine_without_context", "dist_euclidiana_sents", "dist_euclidiana_relations"]
         with open('docred_database/bert_similarities.csv', 'a') as f_object:
             dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
             writer = csv.DictWriter(f_object, fieldnames=field_names)
-            writer.writerow({'created_relation': created_relation, 'relation_found_r': relation_found_r, 'similarity_cosine_with_context': diff_sentences, 'similarity_cosine_without_context': diff_relations, 'dist_euclidiana_context': dist_euclidiana_context, "dist_euclidiana_wc": dist_euclidiana_wc})
+            writer.writerow({'created_relation': created_relation, 'relation_found': relation_found, 'similarity_cosine_sents': diff_sentences, 'similarity_cosine_without_context': diff_relations, 'dist_euclidiana_sents': dist_euclidiana_sents, "dist_euclidiana_relations": dist_euclidiana_relations})
 
             f_object.close()
