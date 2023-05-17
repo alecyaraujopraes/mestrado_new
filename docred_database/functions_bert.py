@@ -75,8 +75,8 @@ def create_embeddings(sentence: str):
     return tokens, tokens_ids, segments_ids, tensor, tensors, embeddings, token_vecs_sum
 
 
-def get_idx_tokens_for_created_relations(tokens, created_relation):
-    tokens_to_found = get_tokens(created_relation)
+def get_idx_tokens_for_created_relations(tokens, sent):
+    tokens_to_found = get_tokens(sent)
     idx_tokens = []
 
     for i, token in enumerate(tokens):
