@@ -99,7 +99,7 @@ possible_relations = {
     "P1365": "replaces", 
     "P1366": "was replaced by", 
     "P1376": "is the capital of", 
-    "P1412": "languages spoken, written or signed", 
+    "P1412": "are the languages spoken, written or signed in", 
     "P1441": "is present in work", 
     "P3373": "is sibling of"
 }

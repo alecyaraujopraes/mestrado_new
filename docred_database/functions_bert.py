@@ -1,4 +1,6 @@
 from math import dist
+from sentence_similarity import sentence_similarity
+from sentence_transformers import SentenceTransformer, util
 
 import torch
 from scipy.spatial.distance import cosine
@@ -127,3 +129,21 @@ def euclidian_distance(token_vecs_sum_1,token_vecs_sum_2):
     dist_euclidiana = dist(token_vecs_sum_1,token_vecs_sum_2)
 
     return dist_euclidiana
+
+
+def sentence_similarity(sent_1: str, sent_2: str):
+    model=sentence_similarity(model_name='distilbert-base-uncased',embedding_type='cls_token_embedding')
+    # Available metric are euclidean, manhattan, minkowski, cosine score.
+    score=model.get_score(sent_1,sent_2,metric="cosine")
+    return(score)
+
+def sentence_transformer(sent_1: str, sent_2: str):
+    sentences = [sent_1, sent_2]
+
+    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+
+    #Compute embedding for both lists
+    embedding_1= model.encode(sentences[0], convert_to_tensor=True)
+    embedding_2 = model.encode(sentences[1], convert_to_tensor=True)
+
+    return(util.pytorch_cos_sim(embedding_1, embedding_2))
