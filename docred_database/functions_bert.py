@@ -1,5 +1,5 @@
 from math import dist
-from sentence_similarity import sentence_similarity
+# from sentence_similarity import sentence_similarity
 from sentence_transformers import SentenceTransformer, util
 from simcse import SimCSE
 
@@ -132,11 +132,11 @@ def euclidian_distance(token_vecs_sum_1,token_vecs_sum_2):
     return dist_euclidiana
 
 
-def sentence_similarity(sent_1: str, sent_2: str):
-    model=sentence_similarity(model_name='distilbert-base-uncased',embedding_type='cls_token_embedding')
-    # Available metric are euclidean, manhattan, minkowski, cosine score.
-    score=model.get_score(sent_1,sent_2,metric="cosine")
-    return(score)
+# def sentence_similarity(sent_1: str, sent_2: str):
+#     model=sentence_similarity(model_name='distilbert-base-uncased',embedding_type='cls_token_embedding')
+#     # Available metric are euclidean, manhattan, minkowski, cosine score.
+#     score=model.get_score(sent_1,sent_2,metric="cosine")
+#     return(score)
 
 def sentence_transformer(sent_1: str, sent_2: str):
     sentences = [sent_1, sent_2]
