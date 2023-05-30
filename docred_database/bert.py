@@ -4,42 +4,51 @@ from functions_bert import (cosine_similarity, create_embeddings,
                             create_mean_torch, euclidian_distance,
                             get_idx_tokens_for_created_relations,
                             get_idx_tokens_for_found_relations, 
-                            get_vectors, # sentence_similarity, 
-                            sentence_transformer, simcse)
+                            get_vectors, sentence_transformer,
+                            )
 
 possible_relations = {
     "P6": "is the head of government of", 
     "P17": "is the country of", 
     "P19": "is the place of birth of", 
-    "P20": "was the place of death of", 
-    "P22": "is father of", 
-    "P25": "is mother of", 
-    "P26": "is spouse of", 
+    "P20": "is the place of death of", 
+    "P22": "is the father of", 
+    "P25": "is the mother of", 
+    "P26": "is the spouse of", 
     "P27": "is the country of citizenship of", 
     "P30": "is the continent of", 
-    "P31": "is an instance of", 
+    "P31": "has an instance of", 
     "P35": "is the head of state of", 
     "P36": "is the capital of", 
     "P37": "is the official language of", 
-    "P39": "a position held by", 
+    "P39": "is a position held by", 
     "P40": "is the child of", 
     "P50": "is the author of", 
     "P54": "is the member of sports team", 
+    "P54": "has the member of sports team", 
     "P57": "is the director of", 
+    "P57": "is a film directed by", 
     "P58": "is the screenwriter of", 
+    "P69": "has educated", 
     "P69": "was educated at", 
     "P86": "is the composer of", 
     "P102": "is the member of political party", 
+    "P102": "has the member of political party", 
     "P108": "is the employer of", 
+    "P108": "had the employee", 
     "P112": "was founded by", 
-    "P118": "is in league", 
+    "P112": "was the founder of", 
+    "P118": "is the league of", 
     "P123": "is the publisher of", 
     "P127": "is owned by", 
-    "P131": "is located in the administrative territorial entity in", 
+    "P127": "is the owner of", 
+    "P131": "is located in the administrative territorial entity of", 
     "P136": "is the genre of", 
     "P137": "is the operator of", 
+    "P137": "is operated by", 
     "P140": "have the religion of", 
-    "P150": "contains administrative territorial entity of", 
+    "P140": "was the religion of", 
+    "P150": "is located in the administrative territorial entity of", 
     "P155": "follows", 
     "P156": "is followed by", 
     "P159": "headquarters location is in", 
@@ -166,17 +175,10 @@ for item in list_relations:
         tokens_fr, tokens_ids_fr, segments_ids_fr, tensor_fr, tensors_fr, embeddings_fr, token_vecs_sum_fr = create_embeddings(relation_found)
         sente_embedding_fr = create_mean_torch(token_vecs_sum_fr)
 
-        # Sentence similarity
-        # sentence_similarity_c = sentence_similarity(created_relation, sent)
-        # sentence_similarity_wc = sentence_similarity(relation, relation_found)
-
         # Sentence transformer
         sentence_transformer_c = sentence_transformer(created_relation, sent)
         sentence_transformer_wc = sentence_transformer(relation, relation_found)
 
-        # SimCSE
-        simcse_c = simcse(created_relation, sent)
-        simcse_wc = simcse(relation, relation_found)
 
 
         diff_sentences = cosine_similarity(created_relation_embedding, sent_embedding)
@@ -191,12 +193,8 @@ for item in list_relations:
             "similarity_cosine_without_context", 
             "dist_euclidiana_sents", 
             "dist_euclidiana_relations", 
-            # "sentence_similarity_context", 
-            # "sentence_similarity_wc", 
             "sentence_transformer_c", 
             "sentence_transformer_wc", 
-            "simcse_c", 
-            "simcse_wc"
         ]
 
         with open('docred_database/bert_similarities.csv', 'a') as f_object:
@@ -209,12 +207,8 @@ for item in list_relations:
                 "similarity_cosine_without_context": diff_relations, 
                 "dist_euclidiana_sents": dist_euclidiana_sents, 
                 "dist_euclidiana_relations": dist_euclidiana_relations, 
-                # "sentence_similarity_context": sentence_similarity_c, 
-                # "sentence_similarity_wc": sentence_similarity_wc, 
                 "sentence_transformer_c": sentence_transformer_c,
                 "sentence_transformer_wc": sentence_transformer_wc, 
-                "simcse_c": simcse_c, 
-                "simcse_wc": simcse_wc
             })
 
             f_object.close()

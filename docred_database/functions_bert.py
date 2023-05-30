@@ -1,7 +1,7 @@
 from math import dist
 # from sentence_similarity import sentence_similarity
 from sentence_transformers import SentenceTransformer, util
-from simcse import SimCSE
+# from simcse import SimCSE
 
 import torch
 from scipy.spatial.distance import cosine
@@ -44,7 +44,7 @@ def creating_embedings(tensor, tensors):
 
     with torch.no_grad():
         outputs = model(tensor, tensors)
-        hidden_states = outputs [2]
+        hidden_states = outputs[2]
 
     # Concatenando uma sequência de vetores
     embeddings = torch.stack(hidden_states, dim =0)
@@ -132,11 +132,11 @@ def euclidian_distance(token_vecs_sum_1,token_vecs_sum_2):
     return dist_euclidiana
 
 
-# def sentence_similarity(sent_1: str, sent_2: str):
-#     model=sentence_similarity(model_name='distilbert-base-uncased',embedding_type='cls_token_embedding')
-#     # Available metric are euclidean, manhattan, minkowski, cosine score.
-#     score=model.get_score(sent_1,sent_2,metric="cosine")
-#     return(score)
+def sentence_similarity(sent_1: str, sent_2: str):
+    model=sentence_similarity(model_name='distilbert-base-uncased',embedding_type='cls_token_embedding')
+    # Available metric are euclidean, manhattan, minkowski, cosine score.
+    score=model.get_score(sent_1,sent_2,metric="cosine")
+    return(score)
 
 def sentence_transformer(sent_1: str, sent_2: str):
     sentences = [sent_1, sent_2]
@@ -149,7 +149,7 @@ def sentence_transformer(sent_1: str, sent_2: str):
 
     return(util.pytorch_cos_sim(embedding_1, embedding_2))
 
-def simcse(sent_1: str, sent_2: str):
-    model = SimCSE("princeton-nlp/sup-simcse-bert-base-uncased")
-    similarities = model.similarity(sent_1, sent_2)
-    return similarities
+# def simcse(sent_1: str, sent_2: str):
+#     model = SimCSE("princeton-nlp/sup-simcse-bert-base-uncased")
+#     similarities = model.similarity(sent_1, sent_2)
+#     return similarities

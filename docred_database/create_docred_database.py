@@ -1,10 +1,11 @@
 import json
 import pandas as pd
 
-file = "DocRED/train_annotated.json"
-rel_file = "DocRED/rel_info.json"
+file = "docred_database/DocRED/train_annotated.json"
+rel_file = "docred_database/DocRED/rel_info.json"
 
 list_obj = []
+
 
 def try_find(vertex_set:list, idx: int, list_sent: list):
     entities = vertex_set[idx]
@@ -21,6 +22,7 @@ def try_find(vertex_set:list, idx: int, list_sent: list):
             if ent.get("name") in ent_name:
                 entity = ent.get("name")
                 return entity
+
 
 def find_entities(vertex_set:list, idx: int, list_sent: list)-> str:
     entity = try_find(vertex_set, idx, list_sent)
@@ -65,21 +67,21 @@ with open(file, "r") as f:
 
             sentence_id = label["evidence"]
 
-            idx_entity_0 = int(f"{label.get('h')}")
-            idx_entity_1 = int(f"{label.get('t')}")
-            print(f"Idx entities: {idx_entity_0, idx_entity_1}")
+            idx_entity_head = int(f"{label.get('h')}")
+            idx_entity_tail = int(f"{label.get('t')}")
+            print(f"Idx entities: {idx_entity_head, idx_entity_tail}")
 
-            entity_0 = find_entities(item.get("vertexSet"), idx_entity_0, sentences)
-            entity_1 = find_entities(item.get("vertexSet"), idx_entity_1, sentences)
+            entity_tail = find_entities(item.get("vertexSet"), idx_entity_tail, sentences)
+            entity_head = find_entities(item.get("vertexSet"), idx_entity_head, sentences)
 
-            print(f"Entity 0: {entity_0}")
-            print(f"Entity 1: {entity_1}")
+            print(f"Entity tail: {entity_tail}")
+            print(f"Entity head: {entity_head}")
 
             dict_s = {
                 "sentences": sentence,
                 "sentences_evidence": sentence_about,
-                "entity_0": entity_0,
-                "entity_1": entity_1,
+                "entity_tail": entity_tail,
+                "entity_head": entity_head,
                 "relation": relation
             }
 
@@ -87,4 +89,4 @@ with open(file, "r") as f:
                 list_obj.append(dict_s)
 
 df = pd.DataFrame(list_obj)
-df.to_csv("docred.csv")
+df.to_csv("docred_database/docred.csv")
