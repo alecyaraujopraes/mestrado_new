@@ -1,10 +1,10 @@
 P22 = father
-P22  Father to Child, 
+P22 = Father to Child,
 direto = is father of, 
 reverso = has as father
 
 P40 = child
-P40  Child to Parent
+P40 = Child to Parent
 direto = is child of
 reverso = has as child
 
@@ -19,7 +19,7 @@ P22-1 = P40
 1..1. Entidade 1 is child of entidade 2
 1..2. Entidade 1 is parent of entidade 2
 · P6
-1..1. …
+1..1. ...
 2. 2O que fazer?
 · Se semelhante a Entidade 1 is father of entidade 2 então
 2..1. <e1 P22 e2>
