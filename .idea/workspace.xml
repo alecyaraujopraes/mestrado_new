@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="846c7cc8-c51a-4666-b407-df36af0be9c0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docred_database/docred2/Inferências.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docred_database/docred2/Inferências.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,7 +51,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1685622122117</updated>
-      <workItem from="1685622122120" duration="3911000" />
+      <workItem from="1685622122120" duration="3973000" />
     </task>
     <servers />
   </component>

@@ -16,7 +16,7 @@ P22-1 = P40
 1..1. Entidade 1 is father of entidade 2
 1..2. Entidade 1 is child of entidade 2
 · P40
-1..1. Entidade 1 is child of entidade 2
+1..1. Entidade 1 is child of entidade 2 (não precisa compara porque comparou antes)
 1..2. Entidade 1 is parent of entidade 2
 · P6
 1..1. ...
