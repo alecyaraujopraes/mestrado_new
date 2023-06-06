@@ -1,3 +1,13 @@
+-------- 6/junho/2023 ----------------------
+
+E1 path = “born in” E2 —> place of birth, sentido direto: de cidade para pessoa
+
+
+Direto: E1 is the place of birth of E2 ==> (E1, place_of_birth, E2)
+Reverso: E1 has the place of birth in E2 ==> (E1, place_of_birth-1, E2), (E1, substituto, E2), (E2, place_of_birth, E1)
+
+
+-------- 30/maio/2023 -------------------
 P22 = father
 P22 = Father to Child,
 direto = is father of, 

@@ -1,1 +1,424 @@
-{"vertexSet": [[{"name": "Bergqvist", "pos": [9, 10], "sent_id": 5, "type": "PER"}, {"name": "Niklas Bergqvist", "pos": [0, 2], "sent_id": 0, "type": "PER"}], [{"pos": [4, 7], "type": "TIME", "sent_id": 0, "name": "6 October 1962"}], [{"name": "Stockholm", "pos": [8, 9], "sent_id": 0, "type": "LOC"}], [{"name": "Sweden", "pos": [20, 21], "sent_id": 3, "type": "LOC"}, {"name": "Swedish", "pos": [11, 12], "sent_id": 4, "type": "LOC"}, {"name": "Swedish", "pos": [13, 14], "sent_id": 0, "type": "LOC"}], [{"pos": [4, 5], "type": "TIME", "sent_id": 1, "name": "1984"}], [{"sent_id": 1, "type": "MISC", "pos": [12, 13], "name": "Synthpop"}], [{"sent_id": 1, "type": "ORG", "pos": [14, 15], "name": "Shanghai"}], [{"sent_id": 2, "type": "NUM", "pos": [3, 4], "name": "two"}], [{"name": "Ballerina", "pos": [14, 15], "sent_id": 2, "type": "MISC"}], [{"name": "Europe", "pos": [20, 21], "sent_id": 2, "type": "LOC"}], [{"pos": [22, 24], "type": "PER", "sent_id": 2, "name": "Kee Marcello"}], [{"name": "Harpo", "pos": [14, 15], "sent_id": 4, "type": "PER"}], [{"pos": [7, 8], "type": "TIME", "sent_id": 5, "name": "1987"}], [{"pos": [1, 2], "type": "TIME", "sent_id": 6, "name": "2015"}], [{"sent_id": 6, "type": "MISC", "pos": [9, 12], "name": "Tracks of Sweden"}], [{"pos": [15, 17], "type": "PER", "sent_id": 6, "name": "Simon Johansson"}]], "labels": [{"r": "P17", "h": 2, "t": 3, "evidence": [0]}, {"r": "P27", "h": 11, "t": 3, "evidence": [4]}, {"r": "P569", "h": 0, "t": 1, "evidence": [0]}, {"r": "P19", "h": 0, "t": 2, "evidence": [0]}, {"r": "P27", "h": 0, "t": 3, "evidence": [0]}], "title": "Niklas Bergqvist", "sents": [["Niklas", "Bergqvist", "(", "born", "6", "October", "1962", "in", "Stockholm", ")", ",", "is", "a", "Swedish", "songwriter", ",", "producer", "and", "musician", "."], ["His", "career", "started", "in", "1984", ",", "as", "a", "founding", "member", "of", "the", "Synthpop", "band", "Shanghai", ",", "which", "he", "started", "along", "his", "school", "friends", "."], ["The", "band", "released", "two", "albums", "and", "numerous", "singles", ",", "with", "their", "debut", "single", "\"", "Ballerina", "\"", ",", "produced", "by", "former", "Europe", "guitarist", "Kee", "Marcello", "."], ["Following", "the", "success", "of", "the", "single", ",", "the", "album", "also", "gained", "positive", "attention", ",", "resulting", "in", "the", "band", "touring", "around", "Sweden", "."], ["The", "second", ",", "and", "final", ",", "studio", "album", "was", "produced", "by", "Swedish", "pop", "star", "Harpo", "."], ["After", "the", "band", "split", "-", "up", "in", "1987", ",", "Bergqvist", "formed", "and", "played", "in", "several", "other", "bands", "until", "he", "decided", "to", "focus", "more", "on", "songwriting", ",", "resulting", "in", "several", "releases", "ever", "since", "."], ["In", "2015", ",", "he", "founded", "the", "independent", "record", "label", "Tracks", "of", "Sweden", "with", "songwriting", "partner", "Simon", "Johansson", "."]]}
+{
+  "vertexSet": [
+    [
+      {
+        "name": "Bergqvist",
+        "pos": [
+          9,
+          10
+        ],
+        "sent_id": 5,
+        "type": "PER"
+      },
+      {
+        "name": "Niklas Bergqvist",
+        "pos": [
+          0,
+          2
+        ],
+        "sent_id": 0,
+        "type": "PER"
+      }
+    ],
+    [
+      {
+        "pos": [
+          4,
+          7
+        ],
+        "type": "TIME",
+        "sent_id": 0,
+        "name": "6 October 1962"
+      }
+    ],
+    [
+      {
+        "name": "Stockholm",
+        "pos": [
+          8,
+          9
+        ],
+        "sent_id": 0,
+        "type": "LOC"
+      }
+    ],
+    [
+      {
+        "name": "Sweden",
+        "pos": [
+          20,
+          21
+        ],
+        "sent_id": 3,
+        "type": "LOC"
+      },
+      {
+        "name": "Swedish",
+        "pos": [
+          11,
+          12
+        ],
+        "sent_id": 4,
+        "type": "LOC"
+      },
+      {
+        "name": "Swedish",
+        "pos": [
+          13,
+          14
+        ],
+        "sent_id": 0,
+        "type": "LOC"
+      }
+    ],
+    [
+      {
+        "pos": [
+          4,
+          5
+        ],
+        "type": "TIME",
+        "sent_id": 1,
+        "name": "1984"
+      }
+    ],
+    [
+      {
+        "sent_id": 1,
+        "type": "MISC",
+        "pos": [
+          12,
+          13
+        ],
+        "name": "Synthpop"
+      }
+    ],
+    [
+      {
+        "sent_id": 1,
+        "type": "ORG",
+        "pos": [
+          14,
+          15
+        ],
+        "name": "Shanghai"
+      }
+    ],
+    [
+      {
+        "sent_id": 2,
+        "type": "NUM",
+        "pos": [
+          3,
+          4
+        ],
+        "name": "two"
+      }
+    ],
+    [
+      {
+        "name": "Ballerina",
+        "pos": [
+          14,
+          15
+        ],
+        "sent_id": 2,
+        "type": "MISC"
+      }
+    ],
+    [
+      {
+        "name": "Europe",
+        "pos": [
+          20,
+          21
+        ],
+        "sent_id": 2,
+        "type": "LOC"
+      }
+    ],
+    [
+      {
+        "pos": [
+          22,
+          24
+        ],
+        "type": "PER",
+        "sent_id": 2,
+        "name": "Kee Marcello"
+      }
+    ],
+    [
+      {
+        "name": "Harpo",
+        "pos": [
+          14,
+          15
+        ],
+        "sent_id": 4,
+        "type": "PER"
+      }
+    ],
+    [
+      {
+        "pos": [
+          7,
+          8
+        ],
+        "type": "TIME",
+        "sent_id": 5,
+        "name": "1987"
+      }
+    ],
+    [
+      {
+        "pos": [
+          1,
+          2
+        ],
+        "type": "TIME",
+        "sent_id": 6,
+        "name": "2015"
+      }
+    ],
+    [
+      {
+        "sent_id": 6,
+        "type": "MISC",
+        "pos": [
+          9,
+          12
+        ],
+        "name": "Tracks of Sweden"
+      }
+    ],
+    [
+      {
+        "pos": [
+          15,
+          17
+        ],
+        "type": "PER",
+        "sent_id": 6,
+        "name": "Simon Johansson"
+      }
+    ]
+  ],
+  "labels": [
+    {
+      "r": "P17",
+      "h": 2,
+      "t": 3,
+      "evidence": [
+        0
+      ]
+    },
+    {
+      "r": "P27",
+      "h": 11,
+      "t": 3,
+      "evidence": [
+        4
+      ]
+    },
+    {
+      "r": "P569",
+      "h": 0,
+      "t": 1,
+      "evidence": [
+        0
+      ]
+    },
+    {
+      "r": "P19",
+      "h": 0,
+      "t": 2,
+      "evidence": [
+        0
+      ]
+    },
+    {
+      "r": "P27",
+      "h": 0,
+      "t": 3,
+      "evidence": [
+        0
+      ]
+    }
+  ],
+  "title": "Niklas Bergqvist",
+  "sents": [
+    [
+      "Niklas",
+      "Bergqvist",
+      "(",
+      "born",
+      "6",
+      "October",
+      "1962",
+      "in",
+      "Stockholm",
+      ")",
+      ",",
+      "is",
+      "a",
+      "Swedish",
+      "songwriter",
+      ",",
+      "producer",
+      "and",
+      "musician",
+      "."
+    ],
+    [
+      "His",
+      "career",
+      "started",
+      "in",
+      "1984",
+      ",",
+      "as",
+      "a",
+      "founding",
+      "member",
+      "of",
+      "the",
+      "Synthpop",
+      "band",
+      "Shanghai",
+      ",",
+      "which",
+      "he",
+      "started",
+      "along",
+      "his",
+      "school",
+      "friends",
+      "."
+    ],
+    [
+      "The",
+      "band",
+      "released",
+      "two",
+      "albums",
+      "and",
+      "numerous",
+      "singles",
+      ",",
+      "with",
+      "their",
+      "debut",
+      "single",
+      "\"",
+      "Ballerina",
+      "\"",
+      ",",
+      "produced",
+      "by",
+      "former",
+      "Europe",
+      "guitarist",
+      "Kee",
+      "Marcello",
+      "."
+    ],
+    [
+      "Following",
+      "the",
+      "success",
+      "of",
+      "the",
+      "single",
+      ",",
+      "the",
+      "album",
+      "also",
+      "gained",
+      "positive",
+      "attention",
+      ",",
+      "resulting",
+      "in",
+      "the",
+      "band",
+      "touring",
+      "around",
+      "Sweden",
+      "."
+    ],
+    [
+      "The",
+      "second",
+      ",",
+      "and",
+      "final",
+      ",",
+      "studio",
+      "album",
+      "was",
+      "produced",
+      "by",
+      "Swedish",
+      "pop",
+      "star",
+      "Harpo",
+      "."
+    ],
+    [
+      "After",
+      "the",
+      "band",
+      "split",
+      "-",
+      "up",
+      "in",
+      "1987",
+      ",",
+      "Bergqvist",
+      "formed",
+      "and",
+      "played",
+      "in",
+      "several",
+      "other",
+      "bands",
+      "until",
+      "he",
+      "decided",
+      "to",
+      "focus",
+      "more",
+      "on",
+      "songwriting",
+      ",",
+      "resulting",
+      "in",
+      "several",
+      "releases",
+      "ever",
+      "since",
+      "."
+    ],
+    [
+      "In",
+      "2015",
+      ",",
+      "he",
+      "founded",
+      "the",
+      "independent",
+      "record",
+      "label",
+      "Tracks",
+      "of",
+      "Sweden",
+      "with",
+      "songwriting",
+      "partner",
+      "Simon",
+      "Johansson",
+      "."
+    ]
+  ]
+}
