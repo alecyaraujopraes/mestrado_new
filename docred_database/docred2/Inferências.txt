@@ -1,3 +1,20 @@
+-------- 13/junho/2023 ----------------------
+Niklas born in Stockolm
+E1      Path     E2
+
+
+Niklas  place_of_birth Stockolm —> Niklas is the place of birth of Stockolm
+                                   Niklas has the place of birth in Stockolm (pob-1) <<<<<<<<<<<<<<<<<<
+                                                                                     (Stockolm, place_of_birth, Niklas)
+
+Niklas  father Stockolm —> Niklas is father of Stockolm
+                           Niklas has as father Stockolm (ifs-1) <<<<<<<<<<<<<<<<<<<<<<<
+                                                                 (Stockolm, place_of_birth, Niklas) desconsiderar
+                                                                 (Niklas, child, Stockolm)
+
+Niklas  child Stockolm —> Niklas is child of Stockolm
+                          Niklas has as child Stockolm (has-1)
+
 -------- 6/junho/2023 ----------------------
 
 E1 path = “born in” E2 —> place of birth, sentido direto: de cidade para pessoa
