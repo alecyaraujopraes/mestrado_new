@@ -139,15 +139,13 @@ def sentence_similarity(sent_1: str, sent_2: str):
     return(score)
 
 def sentence_transformer(sent_1: str, sent_2: str):
-    sentences = [sent_1, sent_2]
-
-    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+    model = SentenceTransformer('all-mpnet-base-v2')
 
     #Compute embedding for both lists
-    embedding_1= model.encode(sentences[0], convert_to_tensor=True)
-    embedding_2 = model.encode(sentences[1], convert_to_tensor=True)
+    embedding_1= model.encode(sent_1, convert_to_tensor=True)
+    embedding_2 = model.encode(sent_2, convert_to_tensor=True)
 
-    return(util.pytorch_cos_sim(embedding_1, embedding_2))
+    return(util.cos_sim(embedding_1, embedding_2))
 
 # def simcse(sent_1: str, sent_2: str):
 #     model = SimCSE("princeton-nlp/sup-simcse-bert-base-uncased")
