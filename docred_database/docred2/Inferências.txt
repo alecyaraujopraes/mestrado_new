@@ -1,0 +1,57 @@
+-------- 13/junho/2023 ----------------------
+Niklas born in Stockolm
+E1      Path     E2
+
+
+Niklas  place_of_birth Stockolm —> Niklas is the place of birth of Stockolm
+                                   Niklas has the place of birth in Stockolm (pob-1) <<<<<<<<<<<<<<<<<<
+                                                                                     (Stockolm, place_of_birth, Niklas)
+
+Niklas  father Stockolm —> Niklas is father of Stockolm
+                           Niklas has as father Stockolm (ifs-1) <<<<<<<<<<<<<<<<<<<<<<<
+                                                                 (Stockolm, place_of_birth, Niklas) desconsiderar
+                                                                 (Niklas, child, Stockolm)
+
+Niklas  child Stockolm —> Niklas is child of Stockolm
+                          Niklas has as child Stockolm (has-1)
+
+-------- 6/junho/2023 ----------------------
+
+E1 path = “born in” E2 —> place of birth, sentido direto: de cidade para pessoa
+
+
+Direto: E1 is the place of birth of E2 ==> (E1, place_of_birth, E2)
+Reverso: E1 has the place of birth in E2 ==> (E1, place_of_birth-1, E2), (E1, substituto, E2), (E2, place_of_birth, E1)
+
+
+-------- 30/maio/2023 -------------------
+P22 = father
+P22 = Father to Child,
+direto = is father of, 
+reverso = has as father
+
+P40 = child
+P40 = Child to Parent
+direto = is child of
+reverso = has as child
+
+P22-1 = P40
+
+
+1. Comparar frase do caminho com  
+· P22
+1..1. Entidade 1 is father of entidade 2
+1..2. Entidade 1 is child of entidade 2
+· P40
+1..1. Entidade 1 is child of entidade 2 (não precisa compara porque comparou antes)
+1..2. Entidade 1 is parent of entidade 2
+· P6
+1..1. ...
+2. 2O que fazer?
+· Se semelhante a Entidade 1 is father of entidade 2 então
+2..1. <e1 P22 e2>
+· Senão se Entidade 1 is child of (P22-1) entidade 2 então
+2..1. Poderia ser <e1 P22-1 e2>, mas não existe P22-1
+2..2. Poderia ser <e2 P22 e1>, mas existe P40
+2..3. <e1 P40 e2>
+2..4. Senão se ...
