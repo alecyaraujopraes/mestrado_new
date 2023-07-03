@@ -215,8 +215,9 @@ for index, row in df.iterrows():
     entity_0 = row["entity_tail"]
     entity_1 = row["entity_head"]
     relation_id = row["code_relation"]
-    relation_found = row["relation"]
+    relation = row["relation"]
 
+    print(entity_0, entity_1, relation_id, relation)
     # checar como encontrar ordem das entidades no texto
     # checar como encontrar as entidades no texto
     # agrupar as frases criadas em uma lista

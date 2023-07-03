@@ -4,6 +4,7 @@ from functions_bert import (
     cosine_similarity, create_embeddings,
     create_mean_torch, euclidian_distance,
     get_idx_tokens_for_created_relations,
+    get_idx_tokens_for_found_relations, 
     get_vectors, sentence_transformer,
 )
 

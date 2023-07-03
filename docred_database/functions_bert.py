@@ -138,7 +138,7 @@ def sentence_similarity(sent_1: str, sent_2: str):
     score=model.get_score(sent_1,sent_2,metric="cosine")
     return(score)
 
-def sentence_transformer(sent_1: str, sent_2: list):
+def sentence_transformer(sent_1: str, sent_2: str):
     model = SentenceTransformer('all-mpnet-base-v2')
 
     #Compute embedding for both lists
