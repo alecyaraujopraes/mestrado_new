@@ -4,10 +4,10 @@ import pandas as pd
 from functions_bert import sentence_transformer
 from functions_spacy import split_text_into_sentences
 
-from nyt_database.ParseSyntaticTree import (Node, aggregate_NNP,
-                                            all_combinations_entities,
-                                            constituency, find_entities)
-from nyt_database.SpacyParse import find_relation_between_entities_spacy
+# from nyt_database.ParseSyntaticTree import (Node, aggregate_NNP,
+#                                             all_combinations_entities,
+#                                             constituency, find_entities)
+# from nyt_database.SpacyParse import find_relation_between_entities_spacy
 
 possible_relations = {
     "direct": {

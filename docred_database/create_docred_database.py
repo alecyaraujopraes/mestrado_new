@@ -54,7 +54,7 @@ with open(file, "r") as f:
                 rels = r.readlines()
                 r = json.loads(rels[0])
             relation = r.get(f"{relation_id}")
-            print(f"Relation: {relation}")
+            print(f"Relation and relation_id: {relation, relation_id}")
 
             list_sentences_about = []
             sentence_about = ""
@@ -82,7 +82,8 @@ with open(file, "r") as f:
                 "sentences_evidence": sentence_about,
                 "entity_tail": entity_tail,
                 "entity_head": entity_head,
-                "relation": relation
+                "relation": relation,
+                "code_relation": relation_id,
             }
 
             if dict_s not in list_obj:
