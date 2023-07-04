@@ -72,6 +72,19 @@
 
 # print([1, 2, 3, 4, 5])
 
-str = "Ohio Coach Frank Solich said : \"keke\" This would not have made our season i"
-print(str)
+# str = "Ohio Coach Frank Solich said : \"keke\" This would not have made our season i"
+# print(str)
 # .replace("'", "\'"))
+
+from sentence_transformers import SentenceTransformer, util
+model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
+
+query_embedding = model.encode('How big is London')
+passage_embedding = model.encode('London is known for its finacial district')
+
+print("Similarity:", util.dot_score(query_embedding, passage_embedding), util.cos_sim(query_embedding, passage_embedding))
+
+for i in util.dot_score(query_embedding, passage_embedding):
+    print(i)
+    for index, im in enumerate(i):
+        print(index, im.item())

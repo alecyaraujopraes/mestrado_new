@@ -146,8 +146,3 @@ def sentence_transformer(sent_1: str, sent_2: str):
     embedding_2 = model.encode(sent_2, convert_to_tensor=True)
 
     return(util.cos_sim(embedding_1, embedding_2))
-
-# def simcse(sent_1: str, sent_2: str):
-#     model = SimCSE("princeton-nlp/sup-simcse-bert-base-uncased")
-#     similarities = model.similarity(sent_1, sent_2)
-#     return similarities

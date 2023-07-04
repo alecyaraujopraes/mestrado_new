@@ -86,6 +86,7 @@ def find_father(entity: str, dependencies: dict)-> list:
 
     return father
 
+
 class Node:
 
     def __init__(self, name):
