@@ -187,6 +187,7 @@ def selection_by_bert(entity_0: str, entity_1: str, sent: str):
         }
     }
 
+
     created_relations = []
     for k,v in possible_relations.items():
         for relation_id, relation in v.items():
@@ -199,7 +200,8 @@ def selection_by_bert(entity_0: str, entity_1: str, sent: str):
     relation = ""
     for item in created_relations:
         if item.get("similarity") > max_tensor:
-            id = item.get(relation_id)
+            id = item.get("relation_id")
             relation = item.get("created_relation")
+            max_tensor = item.get("similarity")
 
     return id, relation

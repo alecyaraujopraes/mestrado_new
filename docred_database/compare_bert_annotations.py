@@ -2,8 +2,6 @@ import csv
 
 import pandas as pd
 from bert_utils import selection_by_bert
-from functions_bert import sentence_transformer
-from functions_spacy import split_text_into_sentences
 from ParseSyntaticTree import (Node, combination_between_noun_phrases,
                                find_entities, find_nodes,
                                get_dict_dependencies, get_nodes_entities,
@@ -21,7 +19,7 @@ for index, row in df.iterrows():
     relation_id = row["code_relation"]
     relation = row["relation"]
 
-    # print(f"Entity 0: {entity_0}, entity 1: {entity_1}, relation id: {relation_id}, relation: {relation}")
+    print(f"Entity tail: {entity_tail}, entity head: {entity_head}, relation id: {relation_id}, relation: {relation}")
 
     for sentence in list_sentences:
         print(f"Sentence: {sentence}")
@@ -52,6 +50,7 @@ for index, row in df.iterrows():
                 path.append(n.name)
 
             relation = " ".join(path)
+            print(f"Relation: {relation}")
 
             if relation:
                 relation_found = relation
@@ -70,14 +69,15 @@ for index, row in df.iterrows():
             else:
                 result = "incorrect"
 
-            with open('docred_database/check_bert_and_annotations.csv', 'a') as f_object:
-                dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-                writer = csv.DictWriter(f_object, fieldnames=field_names)
-                writer.writerow({
-                    "created_relation": created_relation, 
-                    "sent_relation_found": sent_relation_found, 
-                    "sentence_transformer_c": sentence_transformer_c,
-                })
+            print(f"Result: {result}")
 
-                f_object.close()
+            # with open('docred_database/check_bert_and_annotations.csv', 'a') as f_object:
+            #     dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+            #     writer = csv.DictWriter(f_object, fieldnames=field_names)
+            #     writer.writerow({
+            #         "created_relation": created_relation, 
+            #         "sent_relation_found": sent_relation_found, 
+            #         "sentence_transformer_c": sentence_transformer_c,
+            #     })
 
+            #     f_object.close()
