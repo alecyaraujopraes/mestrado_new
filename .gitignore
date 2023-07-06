@@ -1,3 +1,5 @@
+.DS_Store
 venv/*
 docred_database/DocRED/*
 docred_database/docred.csv
+
