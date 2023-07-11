@@ -90,15 +90,20 @@
 #         print(index, im.item())
 
 
-from bert_utils import selection_by_bert
+# from bert_utils import selection_by_bert
 
-entity_0 = "Mário Cravo Neto"
-entity_1 = "Mário Cravo Júnior"
-relation_annotated = "father"
-relation_found = "son"
+# entity_0 = "Mário Cravo Neto"
+# entity_1 = "Mário Cravo Júnior"
+# relation_annotated = "father"
+# relation_found = "son"
 
-sent = "Mário Cravo Neto son Mário Cravo Júnior"
+# sent = "Mário Cravo Neto son Mário Cravo Júnior"
 
-i, x = selection_by_bert(entity_0, entity_1, sent)
+# i, x = selection_by_bert(entity_0, entity_1, sent)
 
-print(i, x)
+# print(i, x)
+
+from utils import compare_strings
+
+compare_strings(["AirAsia Zest", "formerly Asian Spirit and Zest Air", "Philippines", "Pasay City", "Metro Manila", "Asian Spirit and Zest Air", 
+                 "Zest Air", "Manila", "Ninoy Aquino International Airport"])

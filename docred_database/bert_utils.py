@@ -204,4 +204,6 @@ def selection_by_bert(entity_0: str, entity_1: str, sent: str):
             relation = item.get("created_relation")
             max_tensor = item.get("similarity")
 
+    print(f"Relation found by bert: id {id}, relation {relation}, similarity {max_tensor}")
+
     return id, relation
