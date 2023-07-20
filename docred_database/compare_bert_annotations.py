@@ -70,15 +70,15 @@ for index, row in df.iterrows():
                 print(f"Entities: {tuple_of_entities}")
                 relation_id_found_by_bert, relation_found_by_bert = selection_by_bert(entity_0, entity_1, relation_found_by_path)
 
-                tuple_ents, jw_factor, relation_ant, code_relation = get_the_most_similar_pair_entities(df_docred_selected, entity_0, entity_1)
-                print(f"Codes: {code_relation}, {relation_id_found_by_bert}")
+                tuple_ents, jw_factor, annotated_relation, annotated_code_relation = get_the_most_similar_pair_entities(df_docred_selected, entity_0, entity_1)
+                print(f"Codes: {annotated_code_relation}, {relation_id_found_by_bert}")
                 # similar_ents = False
 
                 # for entity_tail, entity_head, relation_annotated, code_relation in zip(df_docred_selected.entity_tail, df_docred_selected.entity_head, df_docred_selected.relation, df_docred_selected.code_relation):
                 #     if compare_strings(entity_tail, entity_0) and compare_strings(entity_head, entity_1):
                 #         similar_ents = True
 
-                if code_relation == relation_id_found_by_bert:
+                if annotated_code_relation == relation_id_found_by_bert:
                     result = 1
 
 
@@ -103,7 +103,7 @@ for index, row in df.iterrows():
                         "tuple_most_similar": tuple_ents,
                         "relation_found_by_path": relation_found_by_path,
                         "relation_found_by_bert": relation_found_by_bert,
-                        "relation_annotated": relation_ant,
+                        "relation_annotated": annotated_relation,
                         "result": result,
                     })
 
