@@ -1,7 +1,7 @@
 import itertools
 from re import compile
 from xml.dom.xmlbuilder import DocumentLS
-
+from itertools import permutations
 import spacy
 from Levenshtein import distance, jaro_winkler
 
@@ -50,46 +50,6 @@ class No:
                     if len(path2) > len(path): return path2
                 path = list(set(path) - set([self]))
                 return path
-
-
-# def find_father(entity: str, dependencies: dict)-> list:
-#     father = []
-
-#     for k,v in dependencies:
-#         if entity in v:
-#             father.append(k)
-
-#     return father
-
-
-# if __name__ == '__main__':
-
-#     sentence = "Zest Airways , Inc. operated as AirAsia Zest ( formerly Asian Spirit and Zest Air ) , was a low - cost airline based at the Ninoy Aquino International Airport in Pasay City , Metro Manila in the Philippines ."
-#     e0 = "Asian Spirit and Zest Air" 
-#     e1 = "Pasay City"
-
-#     dict_depedencies = {
-#         'Zest Airways , Inc.': [], 
-#         'operated': ['Zest Airways , Inc.', 'as'], 
-#         'as': ['AirAsia Zest'],
-#         'AirAsia Zest': ['(', 'formerly Asian Spirit', ')'], 
-#         '(': [], 
-#         'formerly Asian Spirit': ['and', 'Zest Air'], 
-#         'and': [], 
-#         'Zest Air': [], 
-#         ')': [], 
-#         ',': [], 
-#         'was': ['operated', ',', 'a low - cost airline', '.'], 
-#         'a low - cost airline': ['based', ',', 'Metro Manila'], 
-#         'based': ['at'], 
-#         'at': ['the Ninoy Aquino International Airport'], 
-#         'the Ninoy Aquino International Airport': ['in'], 
-#         'in': ['the Philippines'], 
-#         'Pasay City': [], 
-#         'Metro Manila': ['in'], 
-#         'the Philippines': [], 
-#         '.': []
-#     }
 
 
 def split_in_sentences(paragraph: str)-> list:
@@ -141,24 +101,50 @@ def find_nodes(sentence: str)-> list:
 def get_nodes_entities(list_entities: str, list_nodes: str)-> dict:
     dict_nodes = {}
     for entity in list_entities:
-        compare_old = 0
+        tmp_dict = {}
         for node in list_nodes:
-            compare = jaro_winkler(entity, node)
-            if compare_old < compare:
-                compare_old = compare
-                node_choose = node
-        dict_nodes[f"{entity}"] = node_choose
+            jw = jaro_winkler(entity, node)
+            tmp_dict[f"{node}"] = jw
+        sorted_tmp_dict = sorted(tmp_dict.items(), key=lambda x:x[1], reverse=True)
+
+        dict_nodes[f"{entity}"] = list(dict(sorted_tmp_dict))[0:3]
 
     return dict_nodes
+
+
+# def get_nodes_entities(list_entities: str, list_nodes: str)-> dict:
+#     dict_nodes = {}
+#     for entity in list_entities:
+#         compare_old = 0
+#         for node in list_nodes:
+#             compare = jaro_winkler(entity, node)
+#             print(f"Compare: {compare}")
+#             if compare_old < compare:
+#                 compare_old = compare
+#                 node_choose = node
+#         dict_nodes[f"{entity}"] = node_choose
+
+#     return dict_nodes
 
 
 def combination_between_noun_phrases(list_entities: list)-> list:
     combinations_list = []
     combinations = itertools.combinations(list_entities, 2)
     for combination in combinations:
-        combinations_list.append(combination)
+        if combination not in combinations_list:
+            combinations_list.append(combination)
 
     return combinations_list
+
+
+def combination_between_two_lists(list_1: list, list_2: list):
+    unique_combinations = []
+
+    for ent_1 in list_1:
+        for ent_2 in list_2:
+            unique_combinations.append([ent_1, ent_2])
+    
+    return unique_combinations
 
 
 def find_father(entity: str, dependencies: dict)-> list:
