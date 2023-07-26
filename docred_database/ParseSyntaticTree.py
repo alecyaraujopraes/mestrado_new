@@ -98,6 +98,20 @@ def find_nodes(sentence: str)-> list:
     return noun_phrases
 
 
+def get_nodes_from_entities(list_entities: list, list_nodes: list):
+    dict_nodes = {}
+    for entity in list_entities:
+        tmp_list = []
+        for node in list_nodes:
+            if entity in node:
+                tmp_list.append(node)
+            
+        
+        dict_nodes[f"{entity}"] = tmp_list
+
+    return dict_nodes
+
+
 def get_nodes_entities(list_entities: str, list_nodes: str)-> dict:
     dict_nodes = {}
     for entity in list_entities:

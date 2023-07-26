@@ -6,7 +6,7 @@ from Levenshtein import jaro_winkler
 from ParseSyntaticTree import (Node, combination_between_noun_phrases,
                                find_entities, find_nodes,
                                get_dict_dependencies, get_nodes_entities,
-                               split_in_sentences, combination_between_two_lists)
+                               split_in_sentences, get_nodes_from_entities)
 from utils import compare_strings, get_the_most_similar_pair_entities
 
 df_docred = pd.read_csv("docred_database/docred.csv")
@@ -26,86 +26,82 @@ if sentences not in sentences_used:
     dict_dependencies = get_dict_dependencies(sentences)
     list_nodes = find_nodes(sentences)
     print(f"List nodes: {list_nodes}")
-    dict_nodes = get_nodes_entities(list_entities, list_nodes)
-    print(f"Dict nodes: {dict_nodes}")
-    combination_noun_phrases = combination_between_noun_phrases(list_entities)
-    print(f"Combination noun phrases: {combination_noun_phrases}")
+    nodes_from_entities = get_nodes_from_entities(list_entities, list_nodes)
+    print(f"Nodes from entities: {nodes_from_entities}")
+#     combination_nodes = combination_between_noun_phrases(nodes_from_entities)
+#     print(f"Combination noun phrases: {combination_nodes}")
 
-    nodes = {}
-    for n in [Node(k) for k,v in dict_dependencies.items()]: nodes[n.name] = n
-    for k,n in nodes.items():
-        children = dict_dependencies[n.name]
-        n.set_children([nodes[c] for c in children])
-
-
-    for tuple_nodes in combination_noun_phrases:
-        entities_0 = dict_nodes.get(f"{tuple_nodes[0]}")
-        entities_1 = dict_nodes.get(f"{tuple_nodes[1]}")
-        combination = combination_between_two_lists(entities_0, entities_1)
-        for pair_entities in combination:
-            entity_0 = pair_entities[0]
-            entity_1 = pair_entities[1]
-            print(f"Nodes: {entity_0, entity_1}")
-            tuple_of_entities = (entity_0, entity_1)
-            print(f"Tuple of entities: {tuple_of_entities}")
-
-            df_docred_selected = df.loc[df.sentences == sentences]
-
-            node_0 = nodes.get(f"{entity_0}")
-            node_1 = nodes.get(f"{entity_1}")
-
-            path_nodes = node_0.path(node_1)
-            path = []
-
-            if not path:
-                path_nodes = node_1.path(node_0)
-            path = []
-            for n in path_nodes:
-                path.append(n.name)
-
-            relation_found_by_path = " ".join(path)
-            print(f"Relation found by path: {relation_found_by_path}")
-
-            if relation_found_by_path and entity_0 != entity_1:
-                print(f"Relation found by path: {relation_found_by_path}")
-                print(f"Entities: {tuple_of_entities}")
-                relation_id_found_by_bert, relation_found_by_bert = selection_by_bert(entity_0, entity_1, relation_found_by_path)
-
-                tuple_ents, jw_factor, annotated_relation, annotated_code_relation = get_the_most_similar_pair_entities(df_docred_selected, entity_0, entity_1)
-
-                if annotated_code_relation == relation_id_found_by_bert:
-                    print(f"Codes: {annotated_code_relation}, {relation_id_found_by_bert}")
-                    result = 1
-
-                else:
-                    result = 0
+#     nodes = {}
+#     for n in [Node(k) for k,v in dict_dependencies.items()]: nodes[n.name] = n
+#     for k,n in nodes.items():
+#         children = dict_dependencies[n.name]
+#         n.set_children([nodes[c] for c in children])
 
 
-                field_names = [
-                    "sentences", 
-                    "entity_0", 
-                    "entity_1",
-                    "tuple_most_similar",
-                    "relation_found_by_path",
-                    "relation_found_by_bert",
-                    "relation_annotated",
-                    "result",
-                ]
+#     for pair_nodes in combination_nodes:
+#         entity_0 = pair_nodes[0]
+#         entity_1 = pair_nodes[1]
+#         print(f"Nodes: {entity_0, entity_1}")
+#         tuple_of_entities = (entity_0, entity_1)
+#         print(f"Tuple of entities: {tuple_of_entities}")
 
-                with open('docred_database/check_bert_and_annotations.csv', 'a') as f_object:
-                    dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names, delimiter=';')
-                    writer = csv.DictWriter(f_object, fieldnames=field_names, delimiter=';')
-                    writer.writerow({
-                        "sentences": sentences, 
-                        "entity_0": entity_0, 
-                        "entity_1": entity_1,
-                        "tuple_most_similar": tuple_ents,
-                        "relation_found_by_path": relation_found_by_path,
-                        "relation_found_by_bert": relation_found_by_bert,
-                        "relation_annotated": annotated_relation,
-                        "result": result,
-                    })
+#         df_docred_selected = df.loc[df.sentences == sentences]
 
-                    f_object.close()
+#         node_0 = nodes.get(f"{entity_0}")
+#         node_1 = nodes.get(f"{entity_1}")
 
-    sentences_used.append(sentences)
+#         path_nodes = node_0.path(node_1)
+#         path = []
+
+#         if not path:
+#             path_nodes = node_1.path(node_0)
+#         path = []
+#         for n in path_nodes:
+#             path.append(n.name)
+
+#         relation_found_by_path = " ".join(path)
+#         print(f"Relation found by path: {relation_found_by_path}")
+
+#         if relation_found_by_path and entity_0 != entity_1:
+#             print(f"Relation found by path: {relation_found_by_path}")
+#             print(f"Entities: {tuple_of_entities}")
+#             relation_id_found_by_bert, relation_found_by_bert = selection_by_bert(entity_0, entity_1, relation_found_by_path)
+
+#             tuple_ents, jw_factor, annotated_relation, annotated_code_relation = get_the_most_similar_pair_entities(df_docred_selected, entity_0, entity_1)
+
+#             if annotated_code_relation == relation_id_found_by_bert:
+#                 print(f"Codes: {annotated_code_relation}, {relation_id_found_by_bert}")
+#                 result = 1
+
+#             else:
+#                 result = 0
+
+
+#             field_names = [
+#                 "sentences", 
+#                 "entity_0", 
+#                 "entity_1",
+#                 "tuple_most_similar",
+#                 "relation_found_by_path",
+#                 "relation_found_by_bert",
+#                 "relation_annotated",
+#                 "result",
+#             ]
+
+#             with open('docred_database/check_bert_and_annotations.csv', 'a') as f_object:
+#                 dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names, delimiter=';')
+#                 writer = csv.DictWriter(f_object, fieldnames=field_names, delimiter=';')
+#                 writer.writerow({
+#                     "sentences": sentences, 
+#                     "entity_0": entity_0, 
+#                     "entity_1": entity_1,
+#                     "tuple_most_similar": tuple_ents,
+#                     "relation_found_by_path": relation_found_by_path,
+#                     "relation_found_by_bert": relation_found_by_bert,
+#                     "relation_annotated": annotated_relation,
+#                     "result": result,
+#                 })
+
+#                 f_object.close()
+
+# sentences_used.append(sentences)
