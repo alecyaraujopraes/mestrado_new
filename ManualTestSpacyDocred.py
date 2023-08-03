@@ -1,7 +1,7 @@
 import json
 
 import pandas as pd
-import nyt_database.SpacyParse2 as SpacyParse2
+# import nyt_database.SpacyParse2 as SpacyParse2
 from nyt_database.ParseSyntaticTree import (Node, aggregate_NNP, all_combinations_entities,
                                constituency, find_entities)
 from nyt_database.SpacyParse import find_relation_between_entities_spacy
@@ -19,7 +19,8 @@ relations_dict = {}
 
 for item in list_sentences:
 
-    sentence = item.get("sentText")
+    # sentence = item.get("sentText")
+    sentence = item
     nested_list = constituency(sentence)
     entities_list = find_entities(sentence)
     combinations = all_combinations_entities(entities_list)
@@ -63,8 +64,8 @@ for item in list_sentences:
                 print(f"Salvo sentença {i}")
             i += 1
 
-df = pd.DataFrame.from_dict(relations_dict, orient='index')
-df.to_csv("manual_test_spacy.csv", encoding="utf-8", index=False)
+# df = pd.DataFrame.from_dict(relations_dict, orient='index')
+# df.to_csv("manual_test_spacy.csv", encoding="utf-8", index=False)
 
 
 # import json

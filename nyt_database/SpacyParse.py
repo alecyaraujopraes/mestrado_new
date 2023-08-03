@@ -91,6 +91,7 @@ def paths(sentence: str) -> list:
 
     return path_list
 
+
 def find_relation_between_entities_spacy(sentence: str, entities: tuple) -> str:
     entity_1 = entities[0]
     print(f"entity_1: {entity_1}")

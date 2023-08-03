@@ -91,23 +91,25 @@ def find_entities(text: str)-> list:
 
 def find_nodes(sentence: str)-> list:
     nlp = spacy.load("en_core_web_sm")
+    nlp.add_pipe("merge_noun_chunks")
     doc = nlp(sentence)
 
     noun_phrases = [chunk.text for chunk in doc.noun_chunks]
 
+    print(f"Noun phrases: {noun_phrases}")
+
     return noun_phrases
 
 
-def get_nodes_from_entities(list_entities: list, list_nodes: list):
+def get_nodes_from_entities(list_entities: list, list_nodes: list) -> (list, dict):
     dict_nodes = {}
     for entity in list_entities:
         tmp_list = []
         for node in list_nodes:
             if entity in node:
                 tmp_list.append(node)
-            
         
-        dict_nodes[f"{entity}"] = tmp_list
+        dict_nodes[f"{entity}"] = list(set(tmp_list))
 
     return dict_nodes
 
@@ -147,6 +149,8 @@ def combination_between_noun_phrases(list_entities: list)-> list:
     for combination in combinations:
         if combination not in combinations_list:
             combinations_list.append(combination)
+
+    print(f"Combinations list: {combinations_list}")
 
     return combinations_list
 
