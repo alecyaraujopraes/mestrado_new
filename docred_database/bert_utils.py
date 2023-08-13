@@ -193,7 +193,7 @@ def selection_by_bert(entity_0: str, entity_1: str, sent: str):
         for relation_id, relation in v.items():
             created_relation = entity_0 + " " + relation + " " + entity_1
             sentence_transformer_c = sentence_transformer(sent, created_relation)
-            created_relations.append({"relation_id": relation_id, "created_relation": created_relation, "similarity": sentence_transformer_c[0].item()})
+            created_relations.append({"relation_id": relation_id, "created_relation": created_relation, "similarity": sentence_transformer_c[0].item(), "k": k})
 
     max_tensor = 0
     id = 0
@@ -203,7 +203,79 @@ def selection_by_bert(entity_0: str, entity_1: str, sent: str):
             id = item.get("relation_id")
             relation = item.get("created_relation")
             max_tensor = item.get("similarity")
+            way = item.get("k")
 
-    print(f"Relation found by bert: id {id}, relation {relation}, similarity {max_tensor}")
+    print(f"Relation found by bert: id {id}, relation {relation}, similarity {max_tensor}, way {k}")
 
-    return id, relation
+    return id, relation, k
+
+
+def selection_by_bert_location(entity_0: str, entity_1: str, sent: str):
+    possible_relations = {
+        "direct": {
+            "P17": "is the country of", 
+            "P19": "is the place of birth of", 
+            "P20": "is the place of death of", 
+            "P27": "is the country of citizenship of", 
+            "P30": "is the continent of", 
+            "P31": "has an instance of", 
+            "P35": "is the head of state of", 
+            "P36": "is the capital of", 
+            "P37": "is the official language of", 
+            "P131": "is located in the administrative territorial entity of", 
+            "P150": "contains administrative territorial entity of", 
+            "P159": "has headquarters location in",
+            "P190": "is the sister city of", 
+            "P194": "is the legislative body of", 
+            "P205": "is the basin country of", 
+            "P206": "is located in or next to body of water of", 
+            "P276": "is the location of", 
+            "P495": "is the country of origin of", 
+            "P740": "is the location of formation of", 
+            "P1336": "is a territory claimed by", 
+            "P1376": "is the capital of", 
+        }, 
+        "inverse": {
+            "P17": "has as country of", 
+            "P19": "was born in", 
+            "P20": "died in",
+            "P27": "is a citizen of",
+            "P30": "has as continent", 
+            "P31": "is an instance of",
+            "P36": "has as capital", 
+            "P37": "has as official language",
+            "P131": "was the location in the administrative territorial entity of", 
+            "P150": "was the location in the administrative territorial entity of", 
+            "P159": "is the headquarters location of",
+            "P194": "has as legislative body of", 
+            "P205": "has as basin country the", 
+            "P206": "is the location in or next to body of water of",
+            "P276": "was located in", 
+            "P495": "is from country of origin", 
+            "P740": "was formed in", 
+            "P1336": "is claimed as territory", 
+            "P1376": "has as capital", 
+        }
+    }
+
+
+    created_relations = []
+    for k,v in possible_relations.items():
+        for relation_id, relation in v.items():
+            created_relation = entity_0 + " " + relation + " " + entity_1
+            sentence_transformer_c = sentence_transformer(sent, created_relation)
+            created_relations.append({"relation_id": relation_id, "created_relation": created_relation, "similarity": sentence_transformer_c[0].item(), "k": k})
+
+    max_tensor = 0
+    id = 0
+    relation = ""
+    for item in created_relations:
+        if item.get("similarity") > max_tensor:
+            id = item.get("relation_id")
+            relation = item.get("created_relation")
+            max_tensor = item.get("similarity")
+            way = item.get("k")
+
+    print(f"Relation found by bert: id {id}, relation {relation}, similarity {max_tensor}, way {k}")
+
+    return id, relation, k

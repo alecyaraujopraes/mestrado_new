@@ -21,7 +21,7 @@ for item in list_obj:
     code_relation = item.get("code_relation")
 
 
-    str_line = f"""python3 docred_database/SpacyParse.py -s "{sentence}" -et "{entity_tail}" -eh "{entity_head}" -r "{relation}" -cr "{code_relation}" """
+    str_line = f"""python3 docred_database/SpacyParse.py -s "{sentence}" """
 
     with open("docred_database/run_spacy.sh", "a") as my_file:
         my_file.write(str_line)

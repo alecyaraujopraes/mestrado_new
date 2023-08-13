@@ -36,6 +36,18 @@ def find_entities(vertex_set:list, idx: int, list_sent: list)-> str:
     return entity
 
 
+def find_entities_list(vertex_set:list, idx: int, list_sent: list)-> list:
+    entities = vertex_set[idx]
+    list_ents = []        
+
+    for ent in entities:
+        entity = ent.get("name")
+        if entity not in list_ents:
+            list_ents.append(entity)
+
+    return list_ents
+
+
 with open(file, "r") as f:
     list_db = f.readlines()
     l = json.loads(list_db[0])
@@ -71,8 +83,8 @@ with open(file, "r") as f:
             idx_entity_tail = int(f"{label.get('t')}")
             print(f"Idx entities: {idx_entity_head, idx_entity_tail}")
 
-            entity_tail = find_entities(item.get("vertexSet"), idx_entity_tail, sentences)
-            entity_head = find_entities(item.get("vertexSet"), idx_entity_head, sentences)
+            entity_tail = find_entities_list(item.get("vertexSet"), idx_entity_tail, sentences)
+            entity_head = find_entities_list(item.get("vertexSet"), idx_entity_head, sentences)
 
             print(f"Entity tail: {entity_tail}")
             print(f"Entity head: {entity_head}")
