@@ -13,10 +13,23 @@ def compare_strings(ent_o, ent_h)-> bool:
     return similar_ent
 
 
-def get_the_most_similar_pair_entities(df_selected, entity_0, entity_1):
-    pairs_and_similarities = {}
+def get_the_most_similar_string_in_list(list_of_strings: list, entity: str)-> str:
+    max_jw = 0
+    the_most_similar_str = ""
+    for ent in list_of_strings:
+        jw = jaro_winkler(entity, ent)
+        if jw > max_jw:
+            the_most_similar_str = ent
+            max_jw = jw
 
-    for entity_tail, entity_head, relation_annotated, code_relation in zip(df_selected.entity_tail, df_selected.entity_head, df_selected.relation, df_selected.code_relation):
+    return the_most_similar_str
+
+
+def get_the_most_similar_pair_entities_and_relation(df_selected, entity_0, entity_1):
+    pairs_and_similarities = {}
+    for list_entity_tail, list_entity_head, relation_annotated, code_relation in zip(df_selected.entity_tail, df_selected.entity_head, df_selected.relation, df_selected.code_relation):
+        entity_tail = get_the_most_similar_string_in_list(list_entity_tail, entity_0)
+        entity_head = get_the_most_similar_string_in_list(list_entity_head, entity_1)
         tail_jw = jaro_winkler(entity_tail, entity_0)
         head_jw = jaro_winkler(entity_head, entity_1)
         avg_jw = (tail_jw + head_jw)/2

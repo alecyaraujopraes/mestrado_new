@@ -2,10 +2,8 @@ import csv
 
 import pandas as pd
 from bert_utils import selection_by_bert, selection_by_bert_location
-from utils import get_the_most_similar_pair_entities
+from utils import get_the_most_similar_pair_entities_and_relation
 
-#  manual_test_spacy.csv Frase,Entidade_0,Entidade_1,Relacao_encontrada
-#  docred.csv ,sentences,sentences_evidence,entity_tail,entity_head,relation,code_relation
 
 df_test_spacy = pd.read_csv("docred_database/manual_test_spacy.csv")
 df_docred = pd.read_csv("docred_database/docred.csv")
@@ -36,11 +34,11 @@ for index, row in df_test_spacy.iterrows():
             print(f"Change entity ent_0 to {ent_0}")
 
         if way == "inverse":
-            tuple_ents_inverse, jw_factor, annotated_relation, annotated_code_relation = get_the_most_similar_pair_entities(df_docred_selected, ent_1, ent_0)
+            tuple_ents_inverse, jw_factor, annotated_relation, annotated_code_relation = get_the_most_similar_pair_entities_and_relation(df_docred_selected, ent_1, ent_0)
             tuple_ents = (tuple_ents_inverse[1], tuple_ents_inverse[0])
 
         else:
-            tuple_ents, jw_factor, annotated_relation, annotated_code_relation = get_the_most_similar_pair_entities(df_docred_selected, ent_0, ent_1)
+            tuple_ents, jw_factor, annotated_relation, annotated_code_relation = get_the_most_similar_pair_entities_and_relation(df_docred_selected, ent_0, ent_1)
         
         print(f"Tuple ents, jw factor, annotated relation and annotated code relation: {tuple_ents, jw_factor, annotated_relation, annotated_code_relation}")
 
