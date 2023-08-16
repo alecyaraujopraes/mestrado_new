@@ -13,7 +13,11 @@ def compare_strings(ent_o, ent_h)-> bool:
     return similar_ent
 
 
-def get_the_most_similar_string_in_list(list_of_strings: list, entity: str)-> str:
+def get_the_most_similar_string_in_list(strings: str, entity: str)-> str:
+    string_0 = strings.replace("[", "")
+    string_1 = string_0.replace("]", "")
+    string_2 = string_1.replace("'", "")
+    list_of_strings = string_2.split(",")
     max_jw = 0
     the_most_similar_str = ""
     for ent in list_of_strings:

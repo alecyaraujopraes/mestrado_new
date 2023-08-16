@@ -52,54 +52,67 @@ with open(file, "r") as f:
     list_db = f.readlines()
     l = json.loads(list_db[0])
     for item in l:
-        print(f"Item: {item}")
+        # print(f"Item: {item}")
 
         sentences = item.get("sents")
         sentence = ""
         for list_sentence in sentences:
-            sentence_str = " ".join(list_sentence)
-            sentence = sentence + sentence_str
+            if sentence:
+                sentence_str = " ".join(list_sentence)
+                sentence = sentence + " " + sentence_str
+            else:
+                sentence_str = " ".join(list_sentence)
+                sentence = sentence + sentence_str
+        
+        sentence = sentence.replace(" ,", ",")
+        sentence = sentence.replace(" ;", ";")
+        sentence = sentence.replace(" .", ".")
+        sentence = sentence.replace(" :", ":")
+        sentence = sentence.replace(" '", "'")
+        sentence = sentence.replace(" \"", "\"")
 
-        for label in item.get("labels"):
-            relation_id = label.get("r")
-            with open(rel_file, "r") as r:
-                rels = r.readlines()
-                r = json.loads(rels[0])
-            relation = r.get(f"{relation_id}")
-            print(f"Relation and relation_id: {relation, relation_id}")
+        print(f"Sentence: {sentence}")
 
-            list_sentences_about = []
-            sentence_about = ""
-            for sentence_ids in label["evidence"]:
-                list_sentences_about.append(item.get("sents")[sentence_ids])
-                sa = " ".join(item.get("sents")[sentence_ids])
-                sentence_about = sentence_about + sa
-            print(f"Sentence evidence: {label['evidence']}")
-            print(f"Sentence about: {sentence_about}")
+#         for label in item.get("labels"):
+#             relation_id = label.get("r")
+#             with open(rel_file, "r") as r:
+#                 rels = r.readlines()
+#                 r = json.loads(rels[0])
+#             relation = r.get(f"{relation_id}")
+#             print(f"Relation and relation_id: {relation, relation_id}")
 
-            sentence_id = label["evidence"]
+#             list_sentences_about = []
+#             sentence_about = ""
+#             for sentence_ids in label["evidence"]:
+#                 list_sentences_about.append(item.get("sents")[sentence_ids])
+#                 sa = " ".join(item.get("sents")[sentence_ids])
+#                 sentence_about = sentence_about + sa
+#             print(f"Sentence evidence: {label['evidence']}")
+#             print(f"Sentence about: {sentence_about}")
 
-            idx_entity_head = int(f"{label.get('h')}")
-            idx_entity_tail = int(f"{label.get('t')}")
-            print(f"Idx entities: {idx_entity_head, idx_entity_tail}")
+#             sentence_id = label["evidence"]
 
-            entity_tail = find_entities_list(item.get("vertexSet"), idx_entity_tail, sentences)
-            entity_head = find_entities_list(item.get("vertexSet"), idx_entity_head, sentences)
+#             idx_entity_head = int(f"{label.get('h')}")
+#             idx_entity_tail = int(f"{label.get('t')}")
+#             print(f"Idx entities: {idx_entity_head, idx_entity_tail}")
 
-            print(f"Entity tail: {entity_tail}")
-            print(f"Entity head: {entity_head}")
+#             entity_tail = find_entities_list(item.get("vertexSet"), idx_entity_tail, sentences)
+#             entity_head = find_entities_list(item.get("vertexSet"), idx_entity_head, sentences)
 
-            dict_s = {
-                "sentences": sentence,
-                "sentences_evidence": sentence_about,
-                "entity_tail": entity_tail,
-                "entity_head": entity_head,
-                "relation": relation,
-                "code_relation": relation_id,
-            }
+#             print(f"Entity tail: {entity_tail}")
+#             print(f"Entity head: {entity_head}")
 
-            if dict_s not in list_obj:
-                list_obj.append(dict_s)
+#             dict_s = {
+#                 "sentences": sentence,
+#                 "sentences_evidence": sentence_about,
+#                 "entity_tail": entity_tail,
+#                 "entity_head": entity_head,
+#                 "relation": relation,
+#                 "code_relation": relation_id,
+#             }
 
-df = pd.DataFrame(list_obj)
-df.to_csv("docred_database/docred.csv")
+#             if dict_s not in list_obj:
+#                 list_obj.append(dict_s)
+
+# df = pd.DataFrame(list_obj)
+# df.to_csv("docred_database/docred.csv")

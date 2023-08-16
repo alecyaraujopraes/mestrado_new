@@ -25,13 +25,13 @@ for index, row in df_test_spacy.iterrows():
 
         df_docred_selected = df.loc[df.sentences == sent]
 
-        if ent_0 == "Australia":
-            ent_0 = "country Australia"
-            print(f"Change entity ent_0 to {ent_0}")
+        # if ent_0 in ['Philippines', 'Republic of the Philippines']:
+        #     ent_0 = "country " + ent_0
+        #     print(f"Change entity ent_0 to {ent_0}")
 
-        if ent_1 == "Australia":
-            ent_1 == "country Australia"
-            print(f"Change entity ent_0 to {ent_0}")
+        # if ent_1 in ['Philippines', 'Republic of the Philippines']:
+        #     ent_1 = "country " + ent_1
+        #     print(f"Change entity ent_0 to {ent_1}")
 
         if way == "inverse":
             tuple_ents_inverse, jw_factor, annotated_relation, annotated_code_relation = get_the_most_similar_pair_entities_and_relation(df_docred_selected, ent_1, ent_0)
