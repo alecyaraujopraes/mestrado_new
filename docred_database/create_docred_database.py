@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import re
 
 file = "docred_database/DocRED/train_annotated.json"
 rel_file = "docred_database/DocRED/rel_info.json"
@@ -69,7 +70,11 @@ with open(file, "r") as f:
         sentence = sentence.replace(" .", ".")
         sentence = sentence.replace(" :", ":")
         sentence = sentence.replace(" '", "'")
-        sentence = sentence.replace(" \"", "\"")
+        sentence = sentence.replace("( ", "(")
+        sentence = sentence.replace(" )", ")")
+        sentence = re.sub(r'" (.*?) "', sentence.replace('" ', '"'), sentence)
+        sentence = re.sub(r'" (.*?) "', sentence.replace(' "', '"'), sentence)
+        # print(re.findall(r'" (.*?) "', sentence))
 
         print(f"Sentence: {sentence}")
 
