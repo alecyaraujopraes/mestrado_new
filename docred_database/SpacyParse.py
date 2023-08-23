@@ -1,9 +1,11 @@
 import argparse
 import csv
 import itertools
+import re
 
 import spacy
 from Levenshtein import jaro_winkler
+from spacy.tokenizer import Tokenizer
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -47,9 +49,17 @@ def find_entities(text: str)-> list:
 
 
 def find_nodes(sentence: str)-> list:
+    suffix_re = re.compile(r"""[\\]\\"']$""")
+    def custom_tokenizer(nlp):
+        return Tokenizer(nlp.vocab, suffix_search=suffix_re.search)
+
+    nlp.tokenizer = custom_tokenizer(nlp)
     doc = nlp(sentence)
 
-    noun_phrases = [chunk.text for chunk in doc.noun_chunks]
+    noun_phrases = []
+
+    for token in doc:
+        noun_phrases.append(token.text)
 
     return noun_phrases
 
@@ -58,6 +68,7 @@ def get_nodes_entities(list_entities: str, list_nodes: str)-> dict:
     dict_nodes = {}
     for entity in list_entities:
         compare_old = 0
+        node_choose = ""
         for node in list_nodes:
             compare = jaro_winkler(entity, node)
             if compare_old < compare:
@@ -156,22 +167,23 @@ for sentence in sents:
         node_0 = nodes.get(f"{entity_0}")
         node_1 = nodes.get(f"{entity_1}")
 
-        path_nodes = node_0.path(node_1)
-        path = []
-        for n in path_nodes:
-            path.append(n.name)
+        if node_0 and node_1:
+            path_nodes = node_0.path(node_1)
+            path = []
+            for n in path_nodes:
+                path.append(n.name)
 
-        relation = " ".join(path)
+            relation = " ".join(path)
 
-        if relation:
-            print(f"Frase: {args.sentence}, Entidade_0: {entity_0}, Entidade_1: {entity_1}, Relacao_encontrada: {relation}")
+            if relation:
+                print(f"Frase: {args.sentence}, Entidade_0: {entity_0}, Entidade_1: {entity_1}, Relacao_encontrada: {relation}")
 
-            field_names = ["Frase", "Entidade_0", "Entidade_1", "Relacao_encontrada"]
+                field_names = ["Frase", "Entidade_0", "Entidade_1", "Relacao_encontrada"]
 
-            with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
-                dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-                writer = csv.DictWriter(f_object, fieldnames=field_names)
-                writer.writerow({'Frase': args.sentence, 'Entidade_0': entity_0, 'Entidade_1': entity_1, 'Relacao_encontrada': relation})
+                with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
+                    dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+                    writer = csv.DictWriter(f_object, fieldnames=field_names)
+                    writer.writerow({'Frase': args.sentence, 'Entidade_0': entity_0, 'Entidade_1': entity_1, 'Relacao_encontrada': relation})
 
-                f_object.close()
-            print("Saved relation in csv")
+                    f_object.close()
+                print("Saved relation in csv")

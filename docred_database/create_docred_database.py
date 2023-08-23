@@ -72,52 +72,66 @@ with open(file, "r") as f:
         sentence = sentence.replace(" '", "'")
         sentence = sentence.replace("( ", "(")
         sentence = sentence.replace(" )", ")")
-        sentence = re.sub(r'" (.*?) "', sentence.replace('" ', '"'), sentence)
-        sentence = re.sub(r'" (.*?) "', sentence.replace(' "', '"'), sentence)
-        # print(re.findall(r'" (.*?) "', sentence))
 
-        print(f"Sentence: {sentence}")
+        quotes_in_sentence = re.findall(r'" (.*?) "', sentence)
 
-#         for label in item.get("labels"):
-#             relation_id = label.get("r")
-#             with open(rel_file, "r") as r:
-#                 rels = r.readlines()
-#                 r = json.loads(rels[0])
-#             relation = r.get(f"{relation_id}")
-#             print(f"Relation and relation_id: {relation, relation_id}")
+        for quote in quotes_in_sentence:
+            sentence = sentence.replace(f'" {quote} "', f'"{quote}"')
 
-#             list_sentences_about = []
-#             sentence_about = ""
-#             for sentence_ids in label["evidence"]:
-#                 list_sentences_about.append(item.get("sents")[sentence_ids])
-#                 sa = " ".join(item.get("sents")[sentence_ids])
-#                 sentence_about = sentence_about + sa
-#             print(f"Sentence evidence: {label['evidence']}")
-#             print(f"Sentence about: {sentence_about}")
+        for label in item.get("labels"):
+            relation_id = label.get("r")
+            with open(rel_file, "r") as r:
+                rels = r.readlines()
+                r = json.loads(rels[0])
+            relation = r.get(f"{relation_id}")
+            print(f"Relation and relation_id: {relation, relation_id}")
 
-#             sentence_id = label["evidence"]
+            list_sentences_about = []
+            sentence_about = ""
+            for sentence_ids in label["evidence"]:
+                list_sentences_about.append(item.get("sents")[sentence_ids])
+                sa = " ".join(item.get("sents")[sentence_ids])
+                sentence_about = sentence_about + sa
 
-#             idx_entity_head = int(f"{label.get('h')}")
-#             idx_entity_tail = int(f"{label.get('t')}")
-#             print(f"Idx entities: {idx_entity_head, idx_entity_tail}")
+            sentence_about = sentence_about.replace(" ,", ",")
+            sentence_about = sentence_about.replace(" ;", ";")
+            sentence_about = sentence_about.replace(" .", ".")
+            sentence_about = sentence_about.replace(" :", ":")
+            sentence_about = sentence_about.replace(" '", "'")
+            sentence_about = sentence_about.replace("( ", "(")
+            sentence_about = sentence_about.replace(" )", ")")
 
-#             entity_tail = find_entities_list(item.get("vertexSet"), idx_entity_tail, sentences)
-#             entity_head = find_entities_list(item.get("vertexSet"), idx_entity_head, sentences)
+            quotes_in_sentence_a = re.findall(r'" (.*?) "', sentence_about)
 
-#             print(f"Entity tail: {entity_tail}")
-#             print(f"Entity head: {entity_head}")
+            for quote_a in quotes_in_sentence_a:
+                sentence_about = sentence_about.replace(f'" {quote_a} "', f'"{quote_a}"')
 
-#             dict_s = {
-#                 "sentences": sentence,
-#                 "sentences_evidence": sentence_about,
-#                 "entity_tail": entity_tail,
-#                 "entity_head": entity_head,
-#                 "relation": relation,
-#                 "code_relation": relation_id,
-#             }
+            print(f"Sentence evidence: {label['evidence']}")
+            print(f"Sentence about: {sentence_about}")
 
-#             if dict_s not in list_obj:
-#                 list_obj.append(dict_s)
+            sentence_id = label["evidence"]
 
-# df = pd.DataFrame(list_obj)
-# df.to_csv("docred_database/docred.csv")
+            idx_entity_head = int(f"{label.get('h')}")
+            idx_entity_tail = int(f"{label.get('t')}")
+            print(f"Idx entities: {idx_entity_head, idx_entity_tail}")
+
+            entity_tail = find_entities_list(item.get("vertexSet"), idx_entity_tail, sentences)
+            entity_head = find_entities_list(item.get("vertexSet"), idx_entity_head, sentences)
+
+            print(f"Entity tail: {entity_tail}")
+            print(f"Entity head: {entity_head}")
+
+            dict_s = {
+                "sentences": sentence,
+                "sentences_evidence": sentence_about,
+                "entity_tail": entity_tail,
+                "entity_head": entity_head,
+                "relation": relation,
+                "code_relation": relation_id,
+            }
+
+            if dict_s not in list_obj:
+                list_obj.append(dict_s)
+
+df = pd.DataFrame(list_obj)
+df.to_csv("docred_database/docred.csv")

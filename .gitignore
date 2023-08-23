@@ -2,5 +2,6 @@
 venv/*
 docred_database/DocRED/*
 docred_database/docred.csv
-docred_database/manual_test_spacy copy.csv
+docred_database/docred_copy.csv
+docred_database/manual_test_spacy_copy.csv
 docred_database/manual_test_spacy_copy2.csv
