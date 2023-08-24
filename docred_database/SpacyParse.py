@@ -176,14 +176,14 @@ for sentence in sents:
             relation = " ".join(path)
 
             if relation:
-                print(f"Frase: {args.sentence}, Entidade_0: {entity_0}, Entidade_1: {entity_1}, Relacao_encontrada: {relation}")
+                print(f"Frase: {paragraph}, Entidade_0: {entity_0}, Entidade_1: {entity_1}, Relacao_encontrada: {relation}")
 
-                field_names = ["Frase", "Entidade_0", "Entidade_1", "Relacao_encontrada"]
+                # field_names = ["Frase", "Entidade_0", "Entidade_1", "Relacao_encontrada"]
 
-                with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
-                    dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-                    writer = csv.DictWriter(f_object, fieldnames=field_names)
-                    writer.writerow({'Frase': args.sentence, 'Entidade_0': entity_0, 'Entidade_1': entity_1, 'Relacao_encontrada': relation})
+                # with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
+                #     dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+                #     writer = csv.DictWriter(f_object, fieldnames=field_names)
+                #     writer.writerow({'Frase': paragraph, 'Entidade_0': entity_0, 'Entidade_1': entity_1, 'Relacao_encontrada': relation})
 
-                    f_object.close()
-                print("Saved relation in csv")
+                #     f_object.close()
+                # print("Saved relation in csv")

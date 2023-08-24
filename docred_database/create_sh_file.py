@@ -13,8 +13,8 @@ with open(file, "r") as f:
 
 
 for item in list_obj:
-    sentence = item.get("sentences").replace("'", "\\'")
-    sentence = sentence.replace('"', '\\"')
+    sentence = item.get("sentences").replace("'", "\'")
+    sentence = sentence.replace('"', '\"')
     entity_tail = item.get("entity_tail")
     entity_head = item.get("entity_head")
     relation = item.get("relation")
