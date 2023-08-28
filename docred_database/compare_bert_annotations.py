@@ -5,16 +5,16 @@ from bert_utils import selection_by_bert, selection_by_bert_location
 from utils import get_the_most_similar_pair_entities_and_relation
 
 
-df_test_spacy = pd.read_csv("docred_database/manual_test_spacy.csv")
-df_docred = pd.read_csv("docred_database/docred.csv")
+df_test_spacy = pd.read_csv("docred_database/manual_test_spacy.csv", delimiter="|")
+df_docred = pd.read_csv("docred_database/docred.csv", delimiter="|")
 df = df_docred.reset_index() # make sure indexes pair with number of rows
 
-# sentences_used = []
+sentences_used = []
 for index, row in df_test_spacy.iterrows():
     sentences_used = []
     phrase = row["Frase"]
     if phrase not in sentences_used:
-        sent = phrase.replace("\\", "")
+        sent = phrase.replace('\\"', '"')
         ent_0 = row["Entidade_0"]
         ent_1 = row["Entidade_1"]
         relation_found_by_path = row["Relacao_encontrada"]

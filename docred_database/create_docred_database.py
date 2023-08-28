@@ -1,6 +1,8 @@
+import csv
 import json
-import pandas as pd
 import re
+
+import pandas as pd
 
 file = "docred_database/DocRED/train_annotated.json"
 rel_file = "docred_database/DocRED/rel_info.json"
@@ -56,7 +58,7 @@ with open(file, "r") as f:
         # print(f"Item: {item}")
 
         sentences = item.get("sents")
-        sentence = ""
+        sentence = ''
         for list_sentence in sentences:
             if sentence:
                 sentence_str = " ".join(list_sentence)
@@ -72,12 +74,12 @@ with open(file, "r") as f:
         sentence = sentence.replace(" '", "'")
         sentence = sentence.replace("( ", "(")
         sentence = sentence.replace(" )", ")")
-
+        
         quotes_in_sentence = re.findall(r'" (.*?) "', sentence)
 
         for quote in quotes_in_sentence:
             sentence = sentence.replace(f'" {quote} "', f'"{quote}"')
-
+        
         for label in item.get("labels"):
             relation_id = label.get("r")
             with open(rel_file, "r") as r:
@@ -85,29 +87,7 @@ with open(file, "r") as f:
                 r = json.loads(rels[0])
             relation = r.get(f"{relation_id}")
             print(f"Relation and relation_id: {relation, relation_id}")
-
-            list_sentences_about = []
-            sentence_about = ""
-            for sentence_ids in label["evidence"]:
-                list_sentences_about.append(item.get("sents")[sentence_ids])
-                sa = " ".join(item.get("sents")[sentence_ids])
-                sentence_about = sentence_about + sa
-
-            sentence_about = sentence_about.replace(" ,", ",")
-            sentence_about = sentence_about.replace(" ;", ";")
-            sentence_about = sentence_about.replace(" .", ".")
-            sentence_about = sentence_about.replace(" :", ":")
-            sentence_about = sentence_about.replace(" '", "'")
-            sentence_about = sentence_about.replace("( ", "(")
-            sentence_about = sentence_about.replace(" )", ")")
-
-            quotes_in_sentence_a = re.findall(r'" (.*?) "', sentence_about)
-
-            for quote_a in quotes_in_sentence_a:
-                sentence_about = sentence_about.replace(f'" {quote_a} "', f'"{quote_a}"')
-
             print(f"Sentence evidence: {label['evidence']}")
-            print(f"Sentence about: {sentence_about}")
 
             sentence_id = label["evidence"]
 
@@ -121,9 +101,9 @@ with open(file, "r") as f:
             print(f"Entity tail: {entity_tail}")
             print(f"Entity head: {entity_head}")
 
+
             dict_s = {
                 "sentences": sentence,
-                "sentences_evidence": sentence_about,
                 "entity_tail": entity_tail,
                 "entity_head": entity_head,
                 "relation": relation,
@@ -134,4 +114,4 @@ with open(file, "r") as f:
                 list_obj.append(dict_s)
 
 df = pd.DataFrame(list_obj)
-df.to_csv("docred_database/docred.csv")
+df.to_csv("docred_database/docred.csv",sep='|',quoting=csv.QUOTE_NONE)

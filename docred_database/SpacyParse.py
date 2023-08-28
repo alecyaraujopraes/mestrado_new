@@ -26,6 +26,7 @@ def split_in_sentences(paragraph: str)-> list:
 def get_dict_dependencies(sentence: str)-> dict:
     try:
         nlp.add_pipe("merge_noun_chunks")
+        nlp.add_pipe("merge_entities")
     except:
         pass
     doc = nlp(sentence)
@@ -156,6 +157,7 @@ for sentence in sents:
     for k,n in nodes.items():
         children = dict_dependencies[n.name]
         n.set_children([nodes[c] for c in children])
+    print(f"Nodes: {nodes}")
 
     for tuple_nodes in combination_noun_phrases:
         print(f"Nós: {tuple_nodes}")
@@ -164,8 +166,8 @@ for sentence in sents:
         tuple_of_entities = (entity_0, entity_1)
         print(f"Entidades: {tuple_of_entities}")
 
-        node_0 = nodes.get(f"{entity_0}")
-        node_1 = nodes.get(f"{entity_1}")
+        node_0 = nodes.get(f"{tuple_nodes[0]}")
+        node_1 = nodes.get(f"{tuple_nodes[1]}")
 
         if node_0 and node_1:
             path_nodes = node_0.path(node_1)
@@ -176,14 +178,15 @@ for sentence in sents:
             relation = " ".join(path)
 
             if relation:
+
                 print(f"Frase: {paragraph}, Entidade_0: {entity_0}, Entidade_1: {entity_1}, Relacao_encontrada: {relation}")
 
-                # field_names = ["Frase", "Entidade_0", "Entidade_1", "Relacao_encontrada"]
+                field_names = ["Frase", "Entidade_0", "Entidade_1", "Relacao_encontrada"]
 
-                # with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
-                #     dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-                #     writer = csv.DictWriter(f_object, fieldnames=field_names)
-                #     writer.writerow({'Frase': paragraph, 'Entidade_0': entity_0, 'Entidade_1': entity_1, 'Relacao_encontrada': relation})
+                with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
+                    dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+                    writer = csv.DictWriter(f_object, fieldnames=field_names, quoting=csv.QUOTE_NONE, escapechar='\\', delimiter='|')
+                    writer.writerow({'Frase': paragraph, 'Entidade_0': entity_0, 'Entidade_1': entity_1, 'Relacao_encontrada': relation})
 
-                #     f_object.close()
-                # print("Saved relation in csv")
+                    f_object.close()
+                print("Saved relation in csv")
