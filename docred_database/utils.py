@@ -34,16 +34,26 @@ def get_the_most_similar_pair_entities_and_relation(df_selected, entity_0, entit
     for list_entity_tail, list_entity_head, relation_annotated, code_relation in zip(df_selected.entity_tail, df_selected.entity_head, df_selected.relation, df_selected.code_relation):
         entity_tail = get_the_most_similar_string_in_list(list_entity_tail, entity_0)
         entity_head = get_the_most_similar_string_in_list(list_entity_head, entity_1)
+
         tail_jw = jaro_winkler(entity_tail, entity_0)
         head_jw = jaro_winkler(entity_head, entity_1)
-        avg_jw = (tail_jw + head_jw)/2
-        pairs_and_similarities[f"{entity_tail}+{entity_head}+{relation_annotated}+{code_relation}"] = avg_jw
 
-    max_jw_pair = max(pairs_and_similarities, key=pairs_and_similarities.get)
-    pair_ents = max_jw_pair.split("+")
-    tuple_of_ents = (pair_ents[0], pair_ents[1])
-    max_jw_value = max(pairs_and_similarities.values())
-    relation = pair_ents[2]
-    code_relation = pair_ents[3]
+        if tail_jw > 0.7 and head_jw > 0.7:
+            avg_jw = (tail_jw + head_jw)/2
+            pairs_and_similarities[f"{entity_tail}+{entity_head}+{relation_annotated}+{code_relation}"] = avg_jw
+
+    if pairs_and_similarities:
+        max_jw_value = max(pairs_and_similarities.values())
+        max_jw_pair = max(pairs_and_similarities, key=pairs_and_similarities.get)
+        pair_ents = max_jw_pair.split("+")
+        tuple_of_ents = (pair_ents[0], pair_ents[1])
+        relation = pair_ents[2]
+        code_relation = pair_ents[3]
+
+    else:
+        tuple_of_ents = ("", "")
+        max_jw_value = 0
+        relation = "Not found"
+        code_relation = "Not found"
 
     return tuple_of_ents, max_jw_value, relation, code_relation

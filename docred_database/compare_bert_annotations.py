@@ -10,6 +10,7 @@ df_docred = pd.read_csv("docred_database/docred.csv", delimiter="|")
 df = df_docred.reset_index() # make sure indexes pair with number of rows
 
 sentences_used = []
+
 for index, row in df_test_spacy.iterrows():
     sentences_used = []
     phrase = row["Frase"]
@@ -56,8 +57,8 @@ for index, row in df_test_spacy.iterrows():
         ]
 
         with open('docred_database/check_bert_and_annotations.csv', 'a') as f_object:
-            dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names, delimiter=';')
-            writer = csv.DictWriter(f_object, fieldnames=field_names, delimiter=';')
+            dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names, delimiter='|')
+            writer = csv.DictWriter(f_object, fieldnames=field_names, delimiter='|')
             writer.writerow({
                 "sentences": phrase, 
                 "entity_0": ent_0, 
