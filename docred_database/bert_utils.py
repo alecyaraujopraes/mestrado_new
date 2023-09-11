@@ -310,29 +310,50 @@ def selection_by_bert(entity_0: str, entity_1: str, sent: str):
 
     return id, relation, k, rel
 
+
 def subproperties(relation_id):
 
     properties_and_subproperties = {
-        "P17": ["P131", "P27", ],
-        "P19": ["P27", ],
-        "P22": ["P40", ],
-        "P25": ["P40", ],
+        "P17": ["P131", "P27"],
+        "P19": ["P27"],
+        "P22": ["P40"],
+        "P25": ["P40"],
         "P30": ["P150", "P361"],
-        "P35": ["P27", ],
+        "P35": ["P27"],
         "P36": ["P1376"],
         "P39": ["P527"],
         "P40": ["P22", "P25"],
         "P50": ["P170", "P800"],
         "P112": ["P108"],
         "P131": ["P17", "P1001", "P150"],
-        "P150": ["P17", "P131", ],
+        "P150": ["P17", "P131"],
         "P155": ["P156"],
         "P156": ["P155"],
+        "P159": ["P131", "P276", "P17"],
+        "P162": ["P175"],
+        "P170": ["P50"],
+        "P172": ["P27"],
+        "P175": ["P170"],
+        "P176": ["P178"],
+        "P179": ["P361", "P279"],
+        "P194": ["P1001", "P131", "P17"],
+        "P205": ["P17", "P131"],
+        "P206": ["P131"],
+        "P272": ["P449"],
+        "P276": ["P131", "P159"],
+        "P355": ["P749", "P127", "P361"],
+        "P361": ["P527", "P355"],
+        "P364": ["P495"],
+        "P400": ["P178"],
+        "P463": ["P527", "P150"],
 
 
         "P1344": ["P710", ],
         "P1365": ["P1366", ],
     }
+
+    # bay, gulf or river mother of water course
+    # entidades com números são datas
 
     subproperties = properties_and_subproperties.get(relation_id)
 
