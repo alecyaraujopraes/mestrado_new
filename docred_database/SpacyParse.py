@@ -209,6 +209,7 @@ sents = split_in_sentences(paragraph)
 
 
 for sentence in sents:
+    print(f"Sentence: {sentence}")
     list_entities = find_entities(sentence)
     print(f"List entities: {list_entities}")
     dict_dependencies = get_dict_dependencies(sentence)
@@ -226,7 +227,7 @@ for sentence in sents:
     for k,n in nodes.items():
         children = dict_dependencies[n.name]
         n.set_children([nodes[c] for c in children])
-    print(f"Nodes: {nodes}")
+    # print(f"Nodes: {nodes}")
 
 
     for tuple_entities in combination_entities:

@@ -1,7 +1,7 @@
 import csv
 
 import pandas as pd
-from bert_utils import selection_by_bert
+from bert_utils import selection_by_bert, subproperties
 from utils import get_the_most_similar_pair_entities_and_relation
 
 
@@ -43,6 +43,14 @@ for index, row in df_test_spacy.iterrows():
     else:
         result = 0
 
+    lis_sub = subproperties(relation_id_found_by_bert)
+
+    if annotated_code_relation in lis_sub:
+        result_sub = 1
+
+    else:
+        result_sub = 0
+
 
     field_names = [
         "sentences", 
@@ -56,6 +64,7 @@ for index, row in df_test_spacy.iterrows():
         "relation_found_by_bert",
         "relation_id_annotated",
         "result",
+        "result_subproperties",
     ]
 
     with open('docred_database/check_bert_and_annotations.csv', 'a') as f_object:
@@ -73,6 +82,7 @@ for index, row in df_test_spacy.iterrows():
             "relation_found_by_bert": relation_found_by_bert,
             "relation_id_annotated": annotated_relation,
             "result": result,
+            "result_subproperties": result_sub,
         })
 
         f_object.close()
