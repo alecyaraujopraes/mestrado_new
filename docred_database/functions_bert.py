@@ -1,7 +1,5 @@
 from math import dist
-# from sentence_similarity import sentence_similarity
 from sentence_transformers import SentenceTransformer, util
-# from simcse import SimCSE
 
 import torch
 from scipy.spatial.distance import cosine
@@ -118,6 +116,7 @@ def get_idx_tokens_for_found_relations(tokens_r, relation_found):
 
     return idx_tokens_r
 
+
 def cosine_similarity(sente_embedding, sente_embedding_r):
     # Calculate the cosine similarity in context sentence
     token_vecs_sum_1 = sente_embedding
@@ -125,6 +124,23 @@ def cosine_similarity(sente_embedding, sente_embedding_r):
     diff_sentences = 1 - cosine(token_vecs_sum_1, token_vecs_sum_2)
     
     return diff_sentences
+
+
+def bert_resume(paragraph: str, path: str, created_relation: str):
+    # Creating vector to created relation
+    tokens_cr, tokens_ids_cr, segments_ids_cr, tensor_cr, tensors_cr, embeddings_cr, token_vecs_sum_cr = create_embeddings(created_relation)
+    created_relation_embedding = create_mean_torch(token_vecs_sum_cr)
+
+    # Creating vector to paragraph and getting vector from path
+    tokens_sent, tokens_ids_sent, segments_ids_sent, tensor_sent, tensors_sent, embeddings_sent, token_vecs_sum_sent = create_embeddings(paragraph)
+    idx_tokens_vecs_sum = get_idx_tokens_for_created_relations(tokens_sent, path)
+    vecs_sum = get_vectors(idx_tokens_vecs_sum, token_vecs_sum_sent)
+    path_embedding = create_mean_torch(vecs_sum)
+
+    cosine_dff = cosine_similarity(created_relation_embedding, path_embedding)
+
+    return cosine_dff
+
 
 def euclidian_distance(token_vecs_sum_1,token_vecs_sum_2):
     dist_euclidiana = dist(token_vecs_sum_1,token_vecs_sum_2)

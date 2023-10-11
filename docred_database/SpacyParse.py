@@ -211,6 +211,7 @@ sents = split_in_sentences(paragraph)
 for sentence in sents:
     print(f"Sentence: {sentence}")
     list_entities = find_entities(sentence)
+    # list_entities = ['The film', 'David Leitch']
     print(f"List entities: {list_entities}")
     dict_dependencies = get_dict_dependencies(sentence)
     print(f"Dict dependencies: {dict_dependencies}")
@@ -244,9 +245,11 @@ for sentence in sents:
 
             node_0 = nodes.get(f"{n_0}")
             node_1 = nodes.get(f"{n_1}")
+            print(f"Nodes: {node_0, node_1}")
 
             if node_0 and node_1:
                 path = get_path(dict_dependencies, n_0, n_1, node_0, node_1)
+                print(f"Path: {path}")
                 if path:
                     relation = " ".join(path)
                     print(f"Relation: {relation}")
