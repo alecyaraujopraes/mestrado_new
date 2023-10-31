@@ -13,7 +13,7 @@ df = df_docred.reset_index() # make sure indexes pair with number of rows
 for index, row in df_test_spacy.iterrows():
     phrase = row["Frase"]
     sent = phrase.replace('\\"', '"')
-    ent_0 = row["Entidade_x"]
+    ent_0 = row["Entidade_0"]
     ent_1 = row["Entidade_1"]
     nodes = row["Nos"]
     idx_nodes = row["Indice_nos"]

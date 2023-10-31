@@ -211,59 +211,58 @@ sents = split_in_sentences(paragraph)
 for sentence in sents:
     print(f"Sentence: {sentence}")
     list_entities = find_entities(sentence)
-    # list_entities = ['The film', 'David Leitch']
     print(f"List entities: {list_entities}")
     dict_dependencies = get_dict_dependencies(sentence)
     print(f"Dict dependencies: {dict_dependencies}")
-    list_nodes = find_nodes(sentence)
-    print(f"List nodes: {list_nodes}")
-    dict_nodes = get_nodes_entities(list_entities, list_nodes)
-    print(f"Dict nodes: {dict_nodes}")
-    combination_entities = combination_between_noun_phrases(list_entities)
-    print(f"Combination entities: {combination_entities}")
+    # list_nodes = find_nodes(sentence)
+    # print(f"List nodes: {list_nodes}")
+    # dict_nodes = get_nodes_entities(list_entities, list_nodes)
+    # print(f"Dict nodes: {dict_nodes}")
+    # combination_entities = combination_between_noun_phrases(list_entities)
+    # print(f"Combination entities: {combination_entities}")
 
 
-    nodes = {}
-    for n in [Node(k) for k,v in dict_dependencies.items()]: nodes[n.name] = n
-    for k,n in nodes.items():
-        children = dict_dependencies[n.name]
-        n.set_children([nodes[c] for c in children])
-    # print(f"Nodes: {nodes}")
+    # nodes = {}
+    # for n in [Node(k) for k,v in dict_dependencies.items()]: nodes[n.name] = n
+    # for k,n in nodes.items():
+    #     children = dict_dependencies[n.name]
+    #     n.set_children([nodes[c] for c in children])
+    # # print(f"Nodes: {nodes}")
 
 
-    for tuple_entities in combination_entities:
-            print(f"Entidades: {tuple_entities}")
-            n_0 = dict_nodes.get(f"{tuple_entities[0]}")
-            n_1 = dict_nodes.get(f"{tuple_entities[1]}")
-            tuple_nodes = n_0, n_1
-            print(f"Nós: {n_0, n_1}")
+    # for tuple_entities in combination_entities:
+    #         print(f"Entidades: {tuple_entities}")
+    #         n_0 = dict_nodes.get(f"{tuple_entities[0]}")
+    #         n_1 = dict_nodes.get(f"{tuple_entities[1]}")
+    #         tuple_nodes = n_0, n_1
+    #         print(f"Nós: {n_0, n_1}")
 
-            idx_n_0 = list_nodes.index(n_0)
-            idx_n_1 = list_nodes.index(n_1)
-            tuple_idx_nodes = idx_n_0, idx_n_1
-            print(f"Index nodes: {idx_n_0, idx_n_1}")
+    #         idx_n_0 = list_nodes.index(n_0)
+    #         idx_n_1 = list_nodes.index(n_1)
+    #         tuple_idx_nodes = idx_n_0, idx_n_1
+    #         print(f"Index nodes: {idx_n_0, idx_n_1}")
 
-            node_0 = nodes.get(f"{n_0}")
-            node_1 = nodes.get(f"{n_1}")
-            print(f"Nodes: {node_0, node_1}")
+    #         node_0 = nodes.get(f"{n_0}")
+    #         node_1 = nodes.get(f"{n_1}")
+    #         print(f"Nodes: {node_0, node_1}")
 
-            if node_0 and node_1:
-                path = get_path(dict_dependencies, n_0, n_1, node_0, node_1)
-                print(f"Path: {path}")
-                if path:
-                    relation = " ".join(path)
-                    print(f"Relation: {relation}")
+    #         if node_0 and node_1:
+    #             path = get_path(dict_dependencies, n_0, n_1, node_0, node_1)
+    #             print(f"Path: {path}")
+    #             if path:
+    #                 relation = " ".join(path)
+    #                 print(f"Relation: {relation}")
 
-                    if tuple_entities[0] != tuple_entities[1]:
+    #                 if tuple_entities[0] != tuple_entities[1]:
 
-                        print(f"Frase: {paragraph}, Entidade_0: {tuple_entities[0]}, Entidade_1: {tuple_entities[1]}, Nos: {(n_0, n_1)}, Idx_nodes: {idx_n_0, idx_n_1}, Relacao_encontrada: {relation}")
+    #                     print(f"Frase: {paragraph}, Entidade_0: {tuple_entities[0]}, Entidade_1: {tuple_entities[1]}, Nos: {(n_0, n_1)}, Idx_nodes: {idx_n_0, idx_n_1}, Relacao_encontrada: {relation}")
 
-                        field_names = ["Frase", "Entidade_0", "Entidade_1", "Nos", "Idx_nodes", "Relacao_encontrada"]
+    #                     field_names = ["Frase", "Entidade_0", "Entidade_1", "Nos", "Idx_nodes", "Relacao_encontrada"]
 
-                        with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
-                            dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
-                            writer = csv.DictWriter(f_object, fieldnames=field_names, quoting=csv.QUOTE_NONE, escapechar='\\', delimiter='|')
-                            writer.writerow({'Frase': paragraph, 'Entidade_0': tuple_entities[0], 'Entidade_1': tuple_entities[1], 'Nos': tuple_nodes, 'Idx_nodes': tuple_idx_nodes, 'Relacao_encontrada': relation})
+    #                     with open('docred_database/manual_test_spacy.csv', 'a') as f_object:
+    #                         dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
+    #                         writer = csv.DictWriter(f_object, fieldnames=field_names, quoting=csv.QUOTE_NONE, escapechar='\\', delimiter='|')
+    #                         writer.writerow({'Frase': paragraph, 'Entidade_0': tuple_entities[0], 'Entidade_1': tuple_entities[1], 'Nos': tuple_nodes, 'Idx_nodes': tuple_idx_nodes, 'Relacao_encontrada': relation})
 
-                            f_object.close()
-                        print("Saved relation in csv")
+    #                         f_object.close()
+    #                     print("Saved relation in csv")
