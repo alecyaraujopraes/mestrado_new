@@ -1,6 +1,7 @@
 import argparse
 import csv
 import itertools
+import re
 
 import spacy
 from Levenshtein import jaro_winkler
@@ -208,12 +209,36 @@ paragraph = args.sentence
 sents = split_in_sentences(paragraph)
 
 
+def co_referee(text: str):
+    try:
+        nlp.add_pipe('coreferee')
+    except:
+        pass
+
+    doc = nlp(text)
+
+    list_words = re.findall(r"[\w']+|[.,!?;()]", text)
+
+    list_referees = []
+
+    for item in doc._.coref_chains:
+        temp_list = []
+        for k in item:
+            temp_list.append(list_words[k[0]])
+
+        list_referees.append(temp_list)
+    
+    return list_referees
+
+
 for sentence in sents:
     print(f"Sentence: {sentence}")
     list_entities = find_entities(sentence)
     print(f"List entities: {list_entities}")
-    dict_dependencies = get_dict_dependencies(sentence)
-    print(f"Dict dependencies: {dict_dependencies}")
+    list_referees = co_referee(paragraph)
+    print(f"Referees: {list_referees}")
+    # dict_dependencies = get_dict_dependencies(sentence)
+    # print(f"Dict dependencies: {dict_dependencies}")
     # list_nodes = find_nodes(sentence)
     # print(f"List nodes: {list_nodes}")
     # dict_nodes = get_nodes_entities(list_entities, list_nodes)
