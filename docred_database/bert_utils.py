@@ -153,7 +153,7 @@ possible_relations = {
         # "P194": ["is the legislative body of"], 
         "P205": ["is the basin country of"], 
         "P206": ["is located in or next to body of water of"],
-        "P241": ["had served in"], 
+        "P241": ["had served in", "served in"], 
         "P264": ["was released by record label"], 
         "P272": ["was released by"], 
         "P276": ["is the location of"], 
@@ -319,7 +319,7 @@ def selection_by_bert_sc(entity_0: str, entity_1: str, sent: str):
     for k,v in possible_relations.items():
         for relation_id, list_relation in v.items():
             for relation in list_relation:
-                created_relation = entity_0 + " " + relation + " " + entity_1
+                created_relation = f"{entity_0} {relation} {entity_1}"
                 sentence_transformer_c = sentence_transformer(sent, created_relation)
                 created_relations.append({"relation_id": relation_id, "created_relation": created_relation, "similarity": sentence_transformer_c[0].item(), "k": k})
 
