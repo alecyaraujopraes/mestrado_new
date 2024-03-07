@@ -1,20 +1,37 @@
 import csv
 import pandas as pd
+from io import BytesIO
+from minio import Minio
+from minio.error import S3Error
+import pandas as pd
 
-file = "docred_database/docred.csv"
 
-docred = pd.read_csv("docred_database/docred.csv", delimiter="|")
+client = Minio("192.168.0.12:9000/", 
+               "redda",  
+               "SnowinRio", 
+                secure=False)
 
-sentences_used = []
-for index, row in docred.iterrows():
-    sentence_0 = row["sentences"]
-    if sentence_0 not in sentences_used:
-        sentence = sentence_0.replace('"', '\\"')
+print("Connected to Minio")
 
-        str_line = f"""python3 docred_database/SpacyParse.py -s "{sentence}" """
+objects = client.list_objects("mestrado", prefix="papers/")
 
-        with open("docred_database/run_spacy.sh", "a") as my_file:
+for obj in objects:
+    response = client.get_object("mestrado", f"{obj.object_name}")
+
+    texts = response.data.decode("utf-8")
+    # .split("\r\n\r\n")
+
+    # for text in texts:
+    sentences_used = []
+    if texts not in sentences_used:
+        t0 = texts.replace("\r\n", " ")
+        t1 = t0.replace("\n", " ")
+        t = t1.replace("\r", " ")
+
+        str_line = f"""python3 medical_database/SpacyParse.py -s "{t}" """
+
+        with open("medical_database/run_spacy.sh", "a") as my_file:
             my_file.write(str_line)
             my_file.write("\n")
         
-        sentences_used.append(sentence_0)
+        sentences_used.append(texts)
