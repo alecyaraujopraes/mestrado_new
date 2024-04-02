@@ -1,0 +1,6 @@
+<http://example.org/acne> <has_as_sympton> <http://example.org/pimples>.
+<http://example.org/acne> <is_caused_by> <http://example.org/Bacteria>.
+<http://example.org/acromegaly> <is_caused_by> <http://example.org/pituitary_adenoma>.
+<http://example.org/acromegaly> <treatment> <http://example.org/surgery>.
+<http://example.org/acromegaly> <treatment> <http://example.org/medication>.
+<http://example.org/acromegaly> <treatment> <http://example.org/radiation_therapy>.

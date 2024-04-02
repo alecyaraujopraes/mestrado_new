@@ -5,8 +5,7 @@ from bert_utils import selection_by_bert_sc, subproperties, selection_by_bert_re
 from utils import get_the_most_similar_pair_entities_and_relation
 
 
-df_test_spacy = pd.read_csv("docred_database/manual_test_spacy.csv", delimiter="|")
-df_docred = pd.read_csv("docred_database/docred.csv", delimiter="|")
+df_test_spacy = pd.read_csv("medical_database/manual_test_spacy.csv", delimiter="|")
 df = df_docred.reset_index() # make sure indexes pair with number of rows
 
 

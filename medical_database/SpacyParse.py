@@ -132,10 +132,11 @@ def get_nodes_entities(list_entities: str, list_nodes: str)-> dict:
             if compare_old < compare:
                 compare_old = compare
                 node_choose = node
+            if entity in node:
+                node_inside = node
 
         if jaro_winkler(entity, node_choose) > 0.75:
             dict_nodes[f"{entity}"] = node_choose
-
     return dict_nodes
 
 
@@ -250,30 +251,15 @@ for sentence in sents:
     print(f"Sentence: {sentence}")
     # list_entities = find_entities(sentence)
     list_entities = [
-        "severe acne",
-        "acne", 
-        "nodules",
-        "cysts",
-        "pimples",
-        "bacteria",
-        "scarring",
-        "lesions",
-        "androgen",
-        "hormone",
-        "acromegaly", 
-        "acromegaly", 
-        "anemia", 
-        "angina", 
-        "arthiris", 
-        "asbetosis", 
-        "aspergillosis", 
-        "asthma", 
-        "astigmatism", 
-        "atrial fibrillation", 
-        "coronavirus",
-        "popliteal aneurysm",
-        "sickle cell anemia",
-        "thalassemia",
+        # "Exposure",
+        # "radiation",
+        # "Children",
+        # "utero",
+        # "increased risk",
+        # "ALL",
+        # "adults",
+        "radiation therapy",
+        "other cancers",
     ]
     print(f"List entities: {list_entities}")
     # list_referees = co_referee(paragraph)
@@ -325,14 +311,14 @@ for sentence in sents:
                             id, id_rel, way, relation_found_by_bert  = selection_by_bert_sc(tuple_entities[0], tuple_entities[1], f"{tuple_entities[0]} {relation} {tuple_entities[1]}")
                             print(f"Relation found by bert sentence transformer: {relation_found_by_bert, id}")          
 
-                            print(f"Frase: {paragraph}, Entidade_0: {tuple_entities[0]}, Entidade_1: {tuple_entities[1]}, Nos: {(n_0, n_1)}, Idx_nodes: {idx_n_0, idx_n_1}, Path: {relation}, Relacao_encontrada: {relation_found_by_bert}, url: {url}")
+                            print(f"Frase: {sentence}, Entidade_0: {tuple_entities[0]}, Entidade_1: {tuple_entities[1]}, Nos: {(n_0, n_1)}, Idx_nodes: {idx_n_0, idx_n_1}, Path: {relation}, Relacao_encontrada: {relation_found_by_bert}, url: {url}")
 
                             field_names = ["Frase", "Entidade_0", "Entidade_1", "Nos", "Idx_nodes", "Path", "Relacao_encontrada", "url"]
 
                             with open('medical_database/manual_test_spacy.csv', 'a') as f_object:
                                 dictwriter_object = csv.DictWriter(f_object, fieldnames=field_names)
                                 writer = csv.DictWriter(f_object, fieldnames=field_names, quoting=csv.QUOTE_NONE, escapechar='\\', delimiter='|')
-                                writer.writerow({'Frase': paragraph, 'Entidade_0': tuple_entities[0], 'Entidade_1': tuple_entities[1], 'Nos': tuple_nodes, 'Idx_nodes': tuple_idx_nodes, 'Path': relation, 'Relacao_encontrada': relation_found_by_bert, 'url': url})
+                                writer.writerow({'Frase': sentence, 'Entidade_0': tuple_entities[0], 'Entidade_1': tuple_entities[1], 'Nos': tuple_nodes, 'Idx_nodes': tuple_idx_nodes, 'Path': relation, 'Relacao_encontrada': relation_found_by_bert, 'url': url})
 
                                 f_object.close()
                             print("Saved relation in csv")
