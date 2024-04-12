@@ -10,6 +10,7 @@ relations = {
     "P4": "complication",
     "P5": "prevention",
     "P6": "risk factor",
+    "P7": "infected",
 }
 
 possible_relations = {
@@ -20,6 +21,7 @@ possible_relations = {
         "P4": ["can have complications"], 
         "P5": ["is prevented by"], 
         "P6": ["has as risk factor"], 
+        "P7": ["affects"],
     }, 
     "inverse": {
         "P1": ["causes"],
@@ -28,6 +30,7 @@ possible_relations = {
         "P4": ["is a complication of"],
         "P5": ["prevents", "is the prevention of"],
         "P6": ["is a risk factor of"],
+        "P7": ["have been infected"],
     }
 }
 

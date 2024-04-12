@@ -1,0 +1,23 @@
+@prefix : <http://example.org/>
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix doco: <http://purl.org/spar/doco/>.
+@prefix dbr: <http://dbpedia.org/resource/>
+@prefix po: <http://www.essepuntato.it/2008/12/pattern#>.
+@prefix Fabio: <http://purl.org/spar/fabio/>
+
+<!-- :arq1 a Fabio:Item fabio:hasURL file:///dir1/arq1.pdf. -->
+:doc1 a Fabio:Work hasPortrayal :arq1.
+
+:doc1 po:contains :body-matter.
+:body-matter a doco:BodyMatter po:contains :sectionRiskFactorsForAnemia.
+:sectionRiskFactorsForAnemia a doco:Section po:containsAsHeader "These factors can increase risk of anemia”;
+:sectionRiskFactorsForAnemia a doco:Section po:contains :paragraph_1.
+:paragraph_1 a doco:Paragraph po:contains :triple_1;
+:paragraph_1 a doco:Paragraph po:contains :triple_2;
+:triple_1 a rdf:Statement rdf: subject dbr:Anemia;
+:triple_1 a rdf:Statement rdf:predicate :risk_factor;
+:triple_1 a rdf:Statement rdf:object :pregnancy.
+:triple_2 a rdf:Statement rdf: subject :Pregnancy;
+:triple_2 a rdf:Statement rdf:predicate :treatment;
+:triple_2 a rdf:Statement rdf:object dbr:Multivitamin.

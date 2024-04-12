@@ -1,0 +1,65 @@
+PREFIX :      <http://example.org/>
+PREFIX dbr:   <http://dbpedia.org/resource/>
+PREFIX doco:  <http://purl.org/spar/doco/>
+PREFIX fabio: <http://purl.org/spar/fabio/>
+PREFIX po:    <http://www.essepuntato.it/2008/12/pattern#>
+PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
+<!-- Pergunta 1 : Quais documentos falam sobre o tratamento para gestantes que possuem anemia? -->
+:arq1   rdf:type      fabio:Item ;
+        fabio:hasURL  <file:///dir1/arq1.pdf> .
+
+:doc1   rdf:type            fabio:Work ;
+        fabio:hasPortrayal  :arq1 ;
+        po:contains         :body-matter .
+
+:body-matter  rdf:type  doco:BodyMatter ;
+        po:contains  :sectionRiskFactorsForAnemia .
+
+:sectionRiskFactorsForAnemia
+        rdf:type             doco:Section ;
+        po:contains          :paragraph_1 ;
+        po:containsAsHeader  "These factors can increase risk of anemia" .
+
+:paragraph_1  rdf:type  doco:Paragraph ;
+        po:contains  :triple_1 , :triple_2 .
+
+:triple_1  rdf:type    rdf:Statement ;
+        rdf:object     :Pregnancy ;
+        rdf:predicate  :risk_factor_for ;
+        rdf:subject    dbr:Anemia .
+
+:triple_2  rdf:type    rdf:Statement ;
+        rdf:object     dbr:Multivitamin ;
+        rdf:predicate  :treatment ;
+        rdf:subject    :Pregnancy .
+
+
+<!-- Pergunta 2 : Quais documentos falam sobre tratamento de câncers que podem provocar leucemia? -->
+:arq2   rdf:type      fabio:Item ;
+        fabio:hasURL  <file:///dir1/arq2.pdf> .
+
+:doc1   rdf:type            fabio:Work ;
+        fabio:hasPortrayal  :arq2 ;
+        po:contains         :body-matter .
+
+:body-matter  rdf:type  doco:BodyMatter ;
+        po:contains  :sectionRiskFactorsForALL .
+
+:sectionRiskFactorsForALL
+        rdf:type             doco:Section ;
+        po:contains          :paragraph_1 ;
+        po:containsAsHeader  "What are ALL risk factors? Risk factors include:" .
+
+:paragraph_1  rdf:type  doco:Paragraph ;
+        po:contains  :triple_3 , :triple_4 .
+
+:triple_3  rdf:type    rdf:Statement ;
+        rdf:object     :ALL ;
+        rdf:predicate  :risk_factor_for ;
+        rdf:subject    dbr:radiation_therapy .
+
+:triple_4  rdf:type    rdf:Statement ;
+        rdf:object     dbr:cancers ;
+        rdf:predicate  :treatment ;
+        rdf:subject    :radiation_therapy .
