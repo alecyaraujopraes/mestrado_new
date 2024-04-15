@@ -39,7 +39,7 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 :arq2   rdf:type      fabio:Item ;
         fabio:hasURL  <file:///dir1/arq2.pdf> .
 
-:doc1   rdf:type            fabio:Work ;
+:doc2   rdf:type            fabio:Work ;
         fabio:hasPortrayal  :arq2 ;
         po:contains         :body-matter .
 
@@ -63,3 +63,186 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
         rdf:object     dbr:cancers ;
         rdf:predicate  :treatment ;
         rdf:subject    :radiation_therapy .
+
+
+<!-- Pergunta 3 : Quais documentos falam sobre sintomas e tratamento para asma? -->
+:arq3   rdf:type      fabio:Item ;
+        fabio:hasURL  <file:///dir1/arq3.pdf> .
+
+:doc3   rdf:type            fabio:Work ;
+        fabio:hasPortrayal  :arq3 ;
+        po:contains         :body-matter .
+
+:body-matter  rdf:type  doco:BodyMatter ;
+        po:contains  :sectionSymptomsForAsthma , :sectionTreatmentForAsthma.
+
+:sectionSymptomsForAsthma
+        rdf:type             doco:Section ;
+        po:contains          :paragraph_3 ;
+        po:containsAsHeader  "Asthma signs and symptoms include:" .
+
+:sectionTreatmentForAsthma
+        rdf:type             doco:Section ;
+        po:contains          :paragraph_4 ;
+        po:containsAsHeader  "Signs of an asthma emergency include:" .
+
+
+:paragraph_3  rdf:type  doco:Paragraph ;
+        po:contains  :triple_5 , :triple_6, :triple_7 .
+
+:triple_5  rdf:type    rdf:Statement ;
+        rdf:object     :coughing ;
+        rdf:predicate  :symptoms ;
+        rdf:subject    dbr:asthma .
+
+:triple_6  rdf:type    rdf:Statement ;
+        rdf:object     :wheezing ;
+        rdf:predicate  :symptoms ;
+        rdf:subject    dbr:asthma .
+
+:triple_7  rdf:type    rdf:Statement ;
+        rdf:object     :shortness_of_breath ;
+        rdf:predicate  :symptoms ;
+        rdf:subject    dbr:asthma .
+
+:paragraph_4  rdf:type  doco:Paragraph ;
+        po:contains  :triple_8 .
+
+:triple_8  rdf:type    rdf:Statement ;
+        rdf:object     dbr:quick-relief_inhaler ;
+        rdf:predicate  :treatment ;
+        rdf:subject    :asthma .
+
+
+<!-- Pergunta 4 : Quais documentos falam sobre prevenção, tratamento e complicação para a anemia? -->
+:arq4   rdf:type      fabio:Item ;
+        fabio:hasURL  <file:///dir1/arq4.pdf> .
+
+:doc4   rdf:type            fabio:Work ;
+        fabio:hasPortrayal  :arq4 ;
+        po:contains         :body-matter .
+
+:body-matter  rdf:type  doco:BodyMatter ;
+        po:contains  :sectionPreventionForAnemia , :sectionOverview .
+
+:sectionPreventionForAnemia
+        rdf:type             doco:Section ;
+        po:contains          :paragraph_5 ;
+        po:containsAsHeader  "If not treated, anemia can cause many health problems, such as:" .
+
+:sectionOverview
+        rdf:type             doco:Section ;
+        po:contains          :paragraph_6 ;
+        po:containsAsHeader  "Overview" .
+
+:paragraph_5  rdf:type  doco:Paragraph ;
+        po:contains  :triple_9 , :triple_10 , :triple_11  .
+
+:triple_9  rdf:type    rdf:Statement ;
+        rdf:object     :supplements ;
+        rdf:predicate  :treatment ;
+        rdf:subject    dbr:anemia .
+
+:triple_10  rdf:type    rdf:Statement ;
+        rdf:object     :medical_procedures ;
+        rdf:predicate  :treatment ;
+        rdf:subject    dbr:anemia .
+
+:triple_11  rdf:type    rdf:Statement ;
+        rdf:object     :healthy_diet ;
+        rdf:predicate  :prevention ;
+        rdf:subject    dbr:anemia .
+
+:paragraph_6  rdf:type  doco:Paragraph ;
+        po:contains  :triple_12 .
+
+:triple_12  rdf:type    rdf:Statement ;
+        rdf:object     dbr:severe_tiredness ;
+        rdf:predicate  :complication ;
+        rdf:subject    :anemia .
+
+
+<!-- Pergunta 5 : Quais documentos falam sobre causas e tratamentos para leucemia? -->
+:arq5   rdf:type      fabio:Item ;
+        fabio:hasURL  <file:///dir1/arq5.pdf> .
+
+:doc5   rdf:type            fabio:Work ;
+        fabio:hasPortrayal  :arq5 ;
+        po:contains         :body-matter .
+
+:body-matter  rdf:type  doco:BodyMatter ;
+        po:contains  :sectionCausesOfALL , :sectionTreatmentForALL.
+
+:sectionSymptomsForALL
+        rdf:type             doco:Section ;
+        po:contains          :paragraph_7 ;
+        po:containsAsHeader  "What causes acute lymphoblastic leukemia?" .
+
+:sectionTreatmentForALL
+        rdf:type             doco:Section ;
+        po:contains          :paragraph_8 ;
+        po:containsAsHeader  "How is ALL treated?" .
+
+
+:paragraph_5  rdf:type  doco:Paragraph ;
+        po:contains  :triple_13 , :triple_14, :triple_15 .
+
+:triple_13  rdf:type    rdf:Statement ;
+        rdf:object     :targeted_therapy ;
+        rdf:predicate  :treatment ;
+        rdf:subject    dbr:all .
+
+:triple_14  rdf:type    rdf:Statement ;
+        rdf:object     :immunotherapy ;
+        rdf:predicate  :treatment ;
+        rdf:subject    dbr:all .
+
+:triple_15  rdf:type    rdf:Statement ;
+        rdf:object     :chemotherapy ;
+        rdf:predicate  :treatment ;
+        rdf:subject    dbr:all .
+
+:paragraph_6  rdf:type  doco:Paragraph ;
+        po:contains  :triple_16 .
+
+:triple_16  rdf:type    rdf:Statement ;
+        rdf:object     dbr:genetic_mutations ;
+        rdf:predicate  :caused_by ;
+        rdf:subject    :all .
+
+
+<!-- Pergunta 6 : Quais documentos falam sobre tratamento da Acromegalia? -->
+:arq6   rdf:type      fabio:Item ;
+        fabio:hasURL  <file:///dir1/arq6.pdf> .
+
+:doc6   rdf:type            fabio:Work ;
+        fabio:hasPortrayal  :arq6 ;
+        po:contains         :body-matter .
+
+:body-matter  rdf:type  doco:BodyMatter ;
+        po:contains  :sectionTreatmentForAcromegaly.
+
+:sectionTreatmentForAcromegaly
+        rdf:type             doco:Section ;
+        po:contains          :paragraph_7 ;
+        po:containsAsHeader  "How is acromegaly treated?" .
+
+
+:paragraph_7  rdf:type  doco:Paragraph ;
+        po:contains  :triple_17 , :triple_18, :triple_19 .
+
+:triple_17  rdf:type    rdf:Statement ;
+        rdf:object     :radiation_therapy ;
+        rdf:predicate  :treatment ;
+        rdf:subject    dbr:acromegaly .
+
+:triple_18  rdf:type    rdf:Statement ;
+        rdf:object     :surgery ;
+        rdf:predicate  :treatment ;
+        rdf:subject    dbr:acromegaly .
+
+:triple_19  rdf:type    rdf:Statement ;
+        rdf:object     :medication ;
+        rdf:predicate  :treatment ;
+        rdf:subject    dbr:acromegaly .
+

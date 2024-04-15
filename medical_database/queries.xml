@@ -49,3 +49,98 @@ SELECT ?url ?header WHERE {
 :doc1   fabio:hasPortrayal  :arq1 .
 :arq1   fabio:hasURL  ?url .
 } 
+
+<!-- Resposta 3 -->
+SELECT ?url ?header WHERE {
+?t1  rdf:type    rdf:Statement ;
+     rdf:subject    dbr:asthma;
+     rdf:predicate  :symptoms ;
+     rdf:object     :shortness_of_breath.
+  
+?p3 po:contains ?t1.
+?p2 po:contains ?p3.
+?p2 po:containsAsHeader ?header.
+?p1 po:contains ?p2.
+?doc po:contains ?p1.
+:doc3   fabio:hasPortrayal  :arq3 .
+:arq3   fabio:hasURL  ?url .
+} 
+
+SELECT ?url ?header WHERE {
+?t2  rdf:type    rdf:Statement ;
+     rdf:subject    :asthma;
+     rdf:predicate  :treatment ;
+     rdf:object     dbr:quick-relief_inhaler.
+  
+?p3 po:contains ?t2.
+?p2 po:contains ?p3.
+?p2 po:containsAsHeader ?header.
+?p1 po:contains ?p2.
+?doc po:contains ?p1.
+:doc3   fabio:hasPortrayal  :arq3 .
+:arq3   fabio:hasURL  ?url .
+} 
+
+<!-- Resposta 4 -->
+SELECT ?url ?header WHERE {
+?t1  rdf:type    rdf:Statement ;
+     rdf:subject    dbr:anemia;
+     rdf:predicate  :treatment ;
+     rdf:object     :supplements.
+  
+?p3 po:contains ?t1.
+?p2 po:contains ?p3.
+?p2 po:containsAsHeader ?header.
+?p1 po:contains ?p2.
+?doc po:contains ?p1.
+:doc3   fabio:hasPortrayal  :arq3 .
+:arq3   fabio:hasURL  ?url .
+} 
+
+SELECT ?url ?header WHERE {
+?t2  rdf:type    rdf:Statement ;
+     rdf:subject    :asthma;
+     rdf:predicate  :treatment ;
+     rdf:object     dbr:quick-relief_inhaler.
+  
+?p3 po:contains ?t2.
+?p2 po:contains ?p3.
+?p2 po:containsAsHeader ?header.
+?p1 po:contains ?p2.
+?doc po:contains ?p1.
+:doc3   fabio:hasPortrayal  :arq3 .
+:arq3   fabio:hasURL  ?url .
+} 
+
+<!-- Resposta 5 -->
+SELECT ?url ?header WHERE {
+?t1  rdf:type    rdf:Statement ;
+     rdf:subject    dbr:all;
+     rdf:predicate  :treatment ;
+     rdf:object     :chemotherapy.
+  
+?p3 po:contains ?t1.
+?p2 po:contains ?p3.
+?p2 po:containsAsHeader ?header.
+?p1 po:contains ?p2.
+?doc po:contains ?p1.
+:doc3   fabio:hasPortrayal  :arq3 .
+:arq3   fabio:hasURL  ?url .
+} 
+
+<!-- Resposta 6 -->
+SELECT ?url ?header WHERE {
+?t1  rdf:type    rdf:Statement ;
+     rdf:subject    dbr:acromegaly;
+     rdf:predicate  :treatment ;
+     rdf:object     :radiation_therapy.
+  
+?p3 po:contains ?t1.
+?p2 po:contains ?p3.
+?p2 po:containsAsHeader ?header.
+?p1 po:contains ?p2.
+?doc po:contains ?p1.
+:doc3   fabio:hasPortrayal  :arq3 .
+:arq3   fabio:hasURL  ?url .
+} 
+
